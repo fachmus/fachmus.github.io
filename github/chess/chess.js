@@ -464,7 +464,7 @@ const tower = function (x, y, action) {
   y = Number(y);
   for (let index = 0; index < 4; index++) {
     console.log("a");
-    for (let jindex = 0; true; jindex++) {
+    for (let jindex = 1; true; jindex++) {
       console.log("b");
       let isxcoor  = index % 2 == 0 ? true : false;
       let is_upleft = index < 2 ? -1 : 1;
@@ -475,7 +475,7 @@ const tower = function (x, y, action) {
         ) {
           console.log(x+jindex* is_upleft, y);
           action(boardpositions[x+jindex*is_upleft][y],boardpositions[x][y]);
-          if (boardpositions[xif (boardpositions[x+ jindex * is_upleft][y][0] != 0) break
+          if (boardpositions[x+ jindex * is_upleft][y][0] != 0) break
         }
         else if (!isxcoor && 
           y + jindex * is_upleft <=7 &&
@@ -484,6 +484,9 @@ const tower = function (x, y, action) {
             console.log(x, y+jindex* is_upleft);
             action(boardpositions[x][y+jindex* is_upleft],boardpositions[x][y]);
           if (boardpositions[x][y+ jindex * is_upleft][0] != 0) break
+        }
+        else {
+          break
         }
           
     }
