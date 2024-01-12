@@ -1,0 +1,183 @@
+button {
+  width: 50px;
+  font-size: 50px;
+  height: 50px;
+  margin-top: 1px;
+  display: inline-block;
+  position: relative;
+  background-blend-mode: darken;
+  background-size: cover;
+  height: 50px;
+  width: 50px;
+  background-repeat: no-repeat;
+}
+#surrounding {
+    display: grid;
+    position: fixed;
+    width: 430px;
+    margin-top: 160px;
+
+
+}
+div{
+position: relative;
+margin-top: 1px;
+}
+.dark {
+  background-color: navy;
+}
+.light {
+  background-color: azure;
+}
+
+#sidelogsurrounding{
+background-color: azure;
+font-family: 'Times New Roman';
+border-style: solid;
+border-width: 2px;
+width: 200px;
+height: 350px;
+position: fixed;
+margin-left: 450px;
+margin-top: 224px;
+}
+
+#sidelog {
+padding-top: 0px;
+margin-top: 0px;
+}
+
+#sideloghead{
+  font-size: 20px;
+  text-align: center;
+  padding-top: 8px;
+  margin-top: 0px;
+  border-bottom-style: solid;
+  width: 200px;
+  height: 30px;
+  background-color: greenyellow;
+}
+.headline {
+  font-family: 'Times New Roman';
+  font-size: 80px;
+  color: azure;
+  height: 60px;
+  width: 200px;
+  margin-left: 115px;
+  position: fixed;
+  text-align: center ;
+}
+#startbutton {
+  font-family: 'Times New Roman';
+  position: fixed;
+  width: 80px;
+  height: 40px;
+  font-size: 25px;
+  text-align: center;
+  background-color: greenyellow;
+  margin-left: 450px;
+  margin-top: 160px;
+
+
+}
+
+body {
+  background-image:url('https://www.fisherlumber.com/wp-content/uploads/2019/10/Fisher-Lumber_10.21.2019.jpg');
+  background-repeat: space;
+  background-size: 100%;
+  background-repeat: repeat-y;
+  filter: blur();
+}
+#menu {
+  border-radius: 10px;
+  background-color: black;
+  border-style: solid;
+  border-color: darkred;
+  width: 120px;
+  height: 60px;
+
+}
+#paw1 {
+    position: fixed;
+    margin-top: 210px;
+    margin-left: 117px;
+    width: 205px;
+    height: 30px;
+    background-color: azure;
+    border-style: solid;
+    border-color: black;
+    border-width: 3px;
+    border-radius: 5px;
+    font-size: 16px;
+
+}
+#paw2 {
+    position: fixed;
+    margin-top: 150px;
+    margin-left: 117px;
+    width: 200px;
+    height: 80px;
+    font-size: 25px;
+    background-color: azure;
+    border-style: solid;
+    border-color: black;
+    border-width: 3px;
+    border-radius: 5px;    
+}
+#paw3 {
+    width: 80px;
+    background-color: azure;
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 5px;
+    border-color: black;
+    position: fixed;
+    margin-left: 235px;
+    margin-top: 185px;
+}
+.paw {
+    visibility: hidden;
+    transition: ease-in;
+}
+
+.pawn{
+  background-image:url('pawn.png');
+
+}
+.Queen{
+  background-image:url('Queen.png');
+}
+.King{
+background-image:url('King.png');
+}
+.tower{
+background-image:url('tower.png');
+}
+.bishop{
+background-image:url('bishop.png');
+}
+.knight{
+background-image:url('knight.png');
+}
+.dpawn{
+  background-image:url('dpawn.png');
+}
+.dQueen{
+background-image:url('dQueen.png');
+}
+.dKing{
+background-image:url('dKing.png');
+}
+.dtower{
+background-image:url('dtower.png');
+}
+.dbishop{
+background-image:url('dbishop.png');
+}
+.dknight{
+background-image:url('dknight.png');
+}
+/*.test{
+background-image: url('https://th.bing.com/th/id/R.7b2d9177c991290006cfdbb8aaf7d6f6?rik=4UwpP%2f%2bH5HtKsg&riu=http%3a%2f%2fclipart-library.com%2fimages_k%2fchess-pieces-silhouette%2fchess-pieces-silhouette-14.png&ehk=D7bIcaklc4fzU0mF4Nb33agtMx%2ffuLdXQoa%2fVcvoGHI%3d&risl=&pid=ImgRaw&r=0');
+}
+*/

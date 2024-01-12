@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chess</title>
+    <link rel="stylesheet" href="chess.css" />
+  </head>
+  <body>
+    <span>
+      <h1 class="headline">Chess</h1>
+    </span>
+    <span id="surrounding">
+      <span>
+        <button
+          onclick="getPieceMovement(this.id)"
+          class="dark"
+          id="00"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="01"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="02"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="03"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="04"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="05"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="06"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="07"
+        ></button>
+      </span>
+      <span>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="10"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="11"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="12"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="13"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="14"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="15"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="16"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="17"
+        ></button>
+      </span>
+      <span>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="20"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="21"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="22"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="23"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="24"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="25"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="26"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="27"
+        ></button>
+      </span>
+      <span>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="30"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="31"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="32"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="33"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="34"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="35"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="36"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="37"
+        ></button>
+      </span>
+      <span>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="40"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="41"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="42"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="43"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="44"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="45"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="46"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="47"
+        ></button>
+      </span>
+      <span>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="50"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="51"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="52"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="53"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="54"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="55"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="56"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="57"
+        ></button>
+      </span>
+      <span>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="60"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="61"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="62"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="63"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="64"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="65"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="66"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="67"
+        ></button>
+      </span>
+      <span>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="70"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="71"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="72"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="73"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="74"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="75"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="light"
+          id="76"
+        ></button>
+        <button
+          onclick="  getPieceMovement(this.id)"
+          class="dark"
+          id="77"
+        ></button>
+      </span>
+    </span>
+    <span><button id="startbutton" onclick="startgame()">Start</button></span>
+
+    <span id="sidelogsurrounding">
+      <p id="sideloghead">past moves</p>
+      <p id="sidelog">f</p>
+    </span>
+    <span id="paw2" class="paw">
+      <label for="pawnp">pawn promotes to what piece</label>
+    </span>
+    <select
+      title="What piece is the pawn supposed to promote into?"
+      name="pawnp"
+      id="paw1"
+      class="paw"
+    >
+      <option value="Queen">queen</option>
+      <option value="knight">knight</option>
+      <option value="bishop">bishop</option>
+      <option value="tower">tower</option>
+    </select>
+    <input type="submit" value="confirm" id="paw3" class="paw" />
+    <script src="chess.js"></script>
+  </body>
+</html>
