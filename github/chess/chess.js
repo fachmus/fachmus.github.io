@@ -412,11 +412,12 @@ const knight = function (xx, yy, action) {
               }
 */
 const bishop = function (x, y, action) {
+  //works except enpassant
   x = Number(x);
   y = Number(y);
   console.log("bishop");
   for (let index = 1; index <= 4; index++) {
-    for (let jindex = 1; jindex; jindex++) {
+    for (let jindex = 1; true; jindex++) {
       if (
         x + (index < 3 ? -1 : 1)*jindex < 0 ||
         x + (index < 3 ? -1 : 1)*jindex > 7 ||
@@ -457,16 +458,38 @@ const bishop = function (x, y, action) {
     }
   }
 };
-/*const tower = function (x, y, action) {
+const tower = function (x, y, action) {
+  console.log("tower");
+  x = Number(x);
+  y = Number(y);
   for (let index = 0; index < 4; index++) {
-    for (let jindex = 0; jindex; jindex++) {
-      boardpositions[][][0] == 0;
-      index % 2 == 0 ? -1 : 1;
-      index < 2 ? -1 : 1;
+    console.log("a");
+    for (let jindex = 0; true; jindex++) {
+      console.log("b");
+      let isxcoor  = index % 2 == 0 ? true : false;
+      let is_upleft = index < 2 ? -1 : 1;
+      console.log(isxcoor+"\n"+ is_upleft);
+      if (isxcoor && 
+        x + jindex * is_upleft <=7 &&
+        x + jindex * is_upleft >= 0 
+        ) {
+          console.log(x+jindex* is_upleft, y);
+          action(boardpositions[x+jindex*is_upleft][y],boardpositions[x][y]);
+          if (boardpositions[xif (boardpositions[x+ jindex * is_upleft][y][0] != 0) break
+        }
+        else if (!isxcoor && 
+          y + jindex * is_upleft <=7 &&
+          y + jindex * is_upleft >= 0 
+          ) {
+            console.log(x, y+jindex* is_upleft);
+            action(boardpositions[x][y+jindex* is_upleft],boardpositions[x][y]);
+          if (boardpositions[x][y+ jindex * is_upleft][0] != 0) break
+        }
+          
     }
   }
-  console.log("tower");
-};*/
+
+};
 const queen = function (x, y, action) {
   console.log("queen");
   /* bishop(x,y,action);
