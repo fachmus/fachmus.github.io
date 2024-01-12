@@ -418,23 +418,23 @@ const bishop = function (x, y, action) {
   for (let index = 1; index <= 4; index++) {
     for (let jindex = 1; jindex; jindex++) {
       if (
-        x + (index < 3 ? -1 : 1) < 0 ||
-        x + (index < 3 ? -1 : 1) > 7 ||
-        y + (index % 2 == 0 ? -1 : 1) < 0 ||
-        y + (index % 2 == 0 ? -1 : 1) > 7
+        x + (index < 3 ? -1 : 1)*jindex < 0 ||
+        x + (index < 3 ? -1 : 1)*jindex > 7 ||
+        y + (index % 2 == 0 ? -1 : 1)*jindex < 0 ||
+        y + (index % 2 == 0 ? -1 : 1)*jindex > 7
       ) {
         break;
       }
       console
       if (
-        boardpositions[x + (index < 3 ? -1 : 1) * jindex][
-          y + (index % 2 == 0 ? -1 : 1) * jindex
+        boardpositions[x + ((index < 3 ? -1 : 1) * jindex)][
+          y + ((index % 2 == 0 ? -1 : 1) * jindex)
         ][0] == 0
         /*|| boardpositions[x + index < 2 ? -1 : 1]
         [y + (index % 2) == 0 ? -1 : 1]
         [0] == ????enpassant*/
       ) {
-        console.log(x + (index < 3 ? -1 : 1), y + (index % 2) == 0 ? -1 : 1);
+        console.log(x + (index < 3 ? -1 : 1)*jindex, y + ((index % 2) == 0 ? -1 : 1)*jindex);
         action(
           boardpositions[x + (index < 3 ? -1 : 1) * jindex][
             y + (index % 2 == 0 ? -1 : 1) * jindex
