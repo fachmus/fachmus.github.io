@@ -193,7 +193,7 @@ const getPieceMovement = function (position) {
               }
             );
             break;
-          case `${!whitesturn ? "d" : ""}pawn`:
+          case `${!whitesturn ? "d" : ""}bishop`:
             bishop(
               position.charAt(0),
               position.charAt(1),
@@ -209,7 +209,7 @@ const getPieceMovement = function (position) {
               }
             );
             break;
-          case `${!whitesturn ? "d" : ""}pawn`:
+          case `${!whitesturn ? "d" : ""}Queen`:
             queen(
               position.charAt(0),
               position.charAt(1),
@@ -225,7 +225,7 @@ const getPieceMovement = function (position) {
               }
             );
             break;
-          case `${!whitesturn ? "d" : ""}pawn`:
+          case `${!whitesturn ? "d" : ""}King`:
             king(
               position.charAt(0),
               position.charAt(1),
@@ -412,42 +412,46 @@ const knight = function (xx, yy, action) {
               }
 */
 const bishop = function (x, y, action) {
+  x = Number(x);
+  y = Number(y);
   console.log("bishop");
-  for (let index = 0; index < 4; index++) {
-    for (let jindex = 0; jindex; jindex++) {
+  for (let index = 1; index <= 4; index++) {
+    for (let jindex = 1; jindex; jindex++) {
       if (
-        x + index < 2
-          ? -1
-          : 1 < 0 || x + index < 2
-          ? -1
-          : 1 > 7 || y + (index % 2) == 0
-          ? -1
-          : 1 < 0 || y + (index % 2) == 0
-          ? -1
-          : 1 > 7
+        x + (index < 3 ? -1 : 1) < 0 ||
+        x + (index < 3 ? -1 : 1) > 7 ||
+        y + (index % 2 == 0 ? -1 : 1) < 0 ||
+        y + (index % 2 == 0 ? -1 : 1) > 7
       ) {
         break;
       }
+      console
       if (
-        boardpositions[x + index < 2 ? -1 : 1][
-          y + (index % 2) == 0 ? -1 : 1
-        ][0] == 0 /*|| boardpositions[x + index < 2 ? -1 : 1]
+        boardpositions[x + (index < 3 ? -1 : 1) * jindex][
+          y + (index % 2 == 0 ? -1 : 1) * jindex
+        ][0] == 0
+        /*|| boardpositions[x + index < 2 ? -1 : 1]
         [y + (index % 2) == 0 ? -1 : 1]
         [0] == ????enpassant*/
       ) {
+        console.log(x + (index < 3 ? -1 : 1), y + (index % 2) == 0 ? -1 : 1);
         action(
-          boardpositions[x + (index < 2 ? -1 : 1)][y + (index % 2 == 0 ? -1 : 1)],
+          boardpositions[x + (index < 3 ? -1 : 1) * jindex][
+            y + (index % 2 == 0 ? -1 : 1) * jindex
+          ],
           boardpositions[x][y]
         );
       } else {
         action(
-          boardpositions[x + index < 2 ? -1 : 1][y + (index % 2) == 0 ? -1 : 1],
+          boardpositions[x + (index < 3 ? -1 : 1) * jindex][
+            y + (index % 2 == 0 ? -1 : 1) * jindex
+          ],
           boardpositions[x][y]
         );
         break;
       }
 
-      boardpositions[x + index < 2 ? -1 : 1][
+      boardpositions[x + index < 3 ? -1 : 1][
         y + (index % 2) == 0 ? -1 : 1
       ][0] == 0;
     }
