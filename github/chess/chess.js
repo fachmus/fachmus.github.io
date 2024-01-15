@@ -343,6 +343,7 @@ const movePiece = function (xorigin, yorigin, xdest, ydest) {
   ydest = Number(ydest);
   xorigin = Number(xorigin);
   yorigin = Number(yorigin);
+  // irgendein Fehler
   if (
     boardpositions[xdest][ydest][1].charAt(
       boardpositions[xdest][ydest][1].length
@@ -350,7 +351,7 @@ const movePiece = function (xorigin, yorigin, xdest, ydest) {
   )
     boardpositions[xorigin][(ydest + yorigin) / 2][0] ==
       boardpositions[xdest][ydest][1];
-      console.log("enpassant auf "+ xorigin,((ydest + yorigin) / 2));
+      //console.log("enpassant auf "+ xorigin,((ydest + yorigin) / 2),boardpositions[xorigin][(ydest + yorigin) / 2][0]);
   boardpositions[xdest][ydest][1] = boardpositions[xdest][ydest][1].slice(
     0,
     boardpositions[xdest][ydest][1].length - 1
