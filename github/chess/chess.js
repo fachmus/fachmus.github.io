@@ -176,6 +176,7 @@ const getPieceMovement = function (position) {
               (newPosArr) => (newPosArr[1] = pieceOnSquare),
               (newPosArr, oldPosArr, enpPosArr) => {
                 newPosArr[1] = pieceOnSquare;
+                // mus  in move pieces passieren :enpPosArr.push(pieceOnSquare);
                 //enPosArr
               }
             );
@@ -250,6 +251,10 @@ const getPieceMovement = function (position) {
                 ) {
                   newPosArr[1] = pieceOnSquare;
                 }
+              },
+              (newPosArr, oldPosArr) => {
+                console.log(oldPosArr[0] + "c");
+                newPosArr[1] = oldPosArr[0] + "c";
               }
             );
             break;
@@ -282,6 +287,11 @@ const changeturnes = function () {
   whitesturn = !whitesturn;
   if (whitesturn) numberofturns++;
   linearsearch(boardpositions, (x, y) => (boardpositions[x][y][1] = 0));
+linearsearch(boardpositions,(x,y) => {
+  // finde alle arrays mit mehr als zwei und entsprechendem ersten Buchstabe lösche enpassant
+  if (boardpositions[x][y].length > 2 && boardpositions[x][y][2].charAt(0) == (whitesturn ? "d": "p")) {
+boardpositions[x][y].pop();
+  }})
   //clearsallmoves
   showimages();
   linearsearch(boardpositions, (x, y) => {
@@ -320,6 +330,23 @@ const checkAllMoves = function (checkforwhite, pieceOnSquare) {
   }
 };
 const movePiece = function (xorigin, yorigin, xdest, ydest) {
+  if (
+    boardpositions[xorigin][yorigin][0].charAt(3) ==
+      (boardpositions[xorigin][yorigin][0].charAt(0) == "d" ? "a" : "w") &&
+    boardpositions[xdest][ydest].length > 2
+  ) {
+    linearsearch(boardpositions, (x, y) => {
+      if (boardpositions[x][y][0] == boardpositions[xdest][ydest][2]) {
+        boardpositions[x][y][0] = 0;
+      }
+    });
+  } else if (
+    boardpositions[xdest][ydest][1].charAt(
+      boardpositions[xdest][ydest][1].length - 1
+    ) == "c"
+  ) {
+
+  }
   if (
     boardpositions[xdest][ydest][0] != 0 &&
     boardpositions[xdest][ydest][0] != 2
@@ -376,7 +403,7 @@ const pawn = function (x, y, action, action2, action3) {
       boardpositions[x + 2 * iswhitemult][y][0] == 0
     ) {
       let ex = x + 1 * iswhitemult;
-      action3(boardpositions[x + 2 * iswhitemult][y], boardpositions[ex][y]);
+      action3(boardpositions[x + 2 * iswhitemult][y],boardpositions[x][y], boardpositions[ex][y]);
       console.log(x + 2 * iswhitemult, y, "enpassant wäre auf ", ex);
     }
   }
@@ -539,7 +566,8 @@ const king = function (x, y, action, action2) {
             boardpositions[7][1][0] == 0 &&
             boardpositions[7][2][0] == 0
           ) {
-            action2(boardpositions[x][y-2],boardpositions[x][y]);
+            console.log("castlpossible");
+            action2(boardpositions[x][y - 2], boardpositions[x][y]);
           }
           if (
             !dtower2moved &&
@@ -547,7 +575,8 @@ const king = function (x, y, action, action2) {
             boardpositions[7][5][0] == 0 &&
             boardpositions[7][6][0] == 0
           ) {
-            action2(boardpositions[x][y+2],boardpositions[x][y]);
+            console.log("castlpossible");
+            action2(boardpositions[x][y + 2], boardpositions[x][y]);
           }
         } else if (!whitesturn && !dKingmoved) {
           if (
@@ -555,7 +584,8 @@ const king = function (x, y, action, action2) {
             boardpositions[0][1][0] == 0 &&
             boardpositions[0][2][0] == 0
           ) {
-            action2(boardpositions[x][y-2],boardpositions[x][y]);
+            console.log("castlpossible");
+            action2(boardpositions[x][y - 2], boardpositions[x][y]);
           }
           if (
             !dtower2moved &&
@@ -563,7 +593,8 @@ const king = function (x, y, action, action2) {
             boardpositions[0][5][0] == 0 &&
             boardpositions[0][6][0] == 0
           ) {
-            action2(boardpositions[x][y+2],boardpositions[x][y]);
+            console.log("castlpossible");
+            action2(boardpositions[x][y + 2], boardpositions[x][y]);
           }
         }
       }
