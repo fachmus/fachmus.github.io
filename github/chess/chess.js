@@ -16,6 +16,13 @@ let whitesturn = true;
 let numberofturns = 1;
 let gamehasstarted = false;
 let boardpositions;
+let tower1moved = false;
+let tower2moved = false;
+let dtower1moved = false;
+let dtower2moved = false;
+let Kingmoved = false;
+let dKingmoved = false;
+
 const startingboardpositions = [
   [
     ["dtower1", 0],
@@ -165,6 +172,11 @@ const getPieceMovement = function (position) {
                 ) {
                   newPosArr[1] = pieceOnSquare;
                 }
+              },
+              (newPosArr) => (newPosArr[1] = pieceOnSquare),
+              (newPosArr, oldPosArr, enpPosArr) => {
+                newPosArr[1] = pieceOnSquare;
+                //enPosArr
               }
             );
             break;
@@ -350,21 +362,22 @@ const linearsearch = function (three_dim_array, action) {
   }
 };
 
-const pawn = function (x, y, action) {
+const pawn = function (x, y, action, action2, action3) {
   //enpassant einfügen
   let iswhitemult = boardpositions[x][y][0].charAt(0) != "d" ? -1 : 1;
   console.log("pawn" + iswhitemult);
   //x und y sind im gesamten code vertauscht
   if (boardpositions[x + 1 * iswhitemult][y][0] == 0) {
-    action(boardpositions[x + 1 * iswhitemult][y]);
+    action2(boardpositions[x + 1 * iswhitemult][y], boardpositions[x][y]);
     console.log(x + 1 * iswhitemult, y);
     //console.log(boardpositions[x][y][0].charAt(0) == "d");
     if (
       x == (boardpositions[x][y][0].charAt(0) == "d" ? 1 : 6) &&
       boardpositions[x + 2 * iswhitemult][y][0] == 0
     ) {
-      action(boardpositions[x + 2 * iswhitemult][y]);
-      console.log(x + 2 * iswhitemult, y);
+      let ex = x + 1 * iswhitemult;
+      action3(boardpositions[x + 2 * iswhitemult][y], boardpositions[ex][y]);
+      console.log(x + 2 * iswhitemult, y, "enpassant wäre auf ", ex);
     }
   }
   if (y <= 6 && boardpositions[x + 1 * iswhitemult][y + 1][0] != 0) {
@@ -378,7 +391,7 @@ const pawn = function (x, y, action) {
 };
 const knight = function (x, y, action) {
   //klappt
- 
+
   for (let index = 0; index < 4; index++) {
     for (let jindex = -1; jindex < 2; jindex += 2) {
       let isxcoor = index % 2 == 0;
@@ -508,17 +521,50 @@ const tower = function (x, y, action) {
 };
 const queen = function (x, y, action) {
   console.log("queen");
-  bishop(x,y,action);
-  tower(x,y,action);
+  bishop(x, y, action);
+  tower(x, y, action);
 };
-const king = function (x, y, action) {
+const king = function (x, y, action, action2) {
   console.log("king");
   for (i = -1; i <= 1; i++) {
     for (j = -1; j <= 1; j++) {
       if (i != 0 || j != 0) {
         if (x + i <= 7 && x + i >= 0 && y + j <= 7 && y + j >= 0) {
-          console.log((x+i),(y+j));
+          console.log(x + i, y + j);
           action(boardpositions[x + i][y + j], boardpositions[x][y]);
+        }
+        if (whitesturn && !Kingmoved) {
+          if (
+            !dtower1moved &&
+            boardpositions[7][1][0] == 0 &&
+            boardpositions[7][2][0] == 0
+          ) {
+            action2(boardpositions[x][y-2],boardpositions[x][y]);
+          }
+          if (
+            !dtower2moved &&
+            boardpositions[7][4][0] == 0 &&
+            boardpositions[7][5][0] == 0 &&
+            boardpositions[7][6][0] == 0
+          ) {
+            action2(boardpositions[x][y+2],boardpositions[x][y]);
+          }
+        } else if (!whitesturn && !dKingmoved) {
+          if (
+            !dtower1moved &&
+            boardpositions[0][1][0] == 0 &&
+            boardpositions[0][2][0] == 0
+          ) {
+            action2(boardpositions[x][y-2],boardpositions[x][y]);
+          }
+          if (
+            !dtower2moved &&
+            boardpositions[0][4][0] == 0 &&
+            boardpositions[0][5][0] == 0 &&
+            boardpositions[0][6][0] == 0
+          ) {
+            action2(boardpositions[x][y+2],boardpositions[x][y]);
+          }
         }
       }
     }
