@@ -127,12 +127,9 @@ const getPieceMovement = function (position) {
       );
       let origin;
       linearsearch(boardpositions, (x, y) => {
-        let boapos1 = boardpositions[position.charAt(0)][position.charAt(1)][1];
         if (
           boardpositions[x][y][0] ==
-          (boapos1.charAt(boapos1.length) == "e"
-            ? boapos1.slice(0, boapos1.length - 1)
-            : boapos1)
+          boardpositions[position.charAt(0)][position.charAt(1)][1]
         ) {
           origin = [x, y];
         }
@@ -160,13 +157,13 @@ const getPieceMovement = function (position) {
               position.charAt(0),
               position.charAt(1),
 
-              (newPosArr, oldPosArr, is_enpassant) => {
+              (newPosArr, oldPosArr) => {
                 if (
                   newPosArr[0] == 0 ||
                   (newPosArr[0].charAt(0) == "d") !=
                     (oldPosArr[0].charAt(0) == "d")
                 ) {
-                  newPosArr[1] = pieceOnSquare + (is_enpassant ? "e" : "");
+                  newPosArr[1] = pieceOnSquare;
                 }
               }
             );
@@ -176,16 +173,7 @@ const getPieceMovement = function (position) {
               position.charAt(0),
               position.charAt(1),
 
-              (newPosArr, oldPosArr) => {
-                if (
-                  newPosArr[0] == 0 ||
-                  (  (newPosArr[0].charAt(0) == "d") !=
-                      (oldPosArr[0].charAt(0) == "d")) &&
-                  newPosArr[0].charAt(newPosArr[0].length)
-                ) {
-                  newPosArr[1] = pieceOnSquare;
-                }
-              }
+              (newPosArr) => (newPosArr[1] = pieceOnSquare)
             );
             break;
           case `${!whitesturn ? "d" : ""}knight`:
@@ -197,9 +185,8 @@ const getPieceMovement = function (position) {
               (newPosArr, oldPosArr) => {
                 if (
                   newPosArr[0] == 0 ||
-                    ((newPosArr[0].charAt(0) == "d") !=
-                      (oldPosArr[0].charAt(0) == "d")) &&
-                  newPosArr[0].charAt(newPosArr[0].length)
+                  (newPosArr[0].charAt(0) == "d") !=
+                    (oldPosArr[0].charAt(0) == "d")
                 ) {
                   newPosArr[1] = pieceOnSquare;
                 }
@@ -214,9 +201,8 @@ const getPieceMovement = function (position) {
               (newPosArr, oldPosArr) => {
                 if (
                   newPosArr[0] == 0 ||
-                    ((newPosArr[0].charAt(0) == "d") !=
-                      (oldPosArr[0].charAt(0) == "d")) &&
-                  newPosArr[0].charAt(newPosArr[0].length)
+                  (newPosArr[0].charAt(0) == "d") !=
+                    (oldPosArr[0].charAt(0) == "d")
                 ) {
                   newPosArr[1] = pieceOnSquare;
                 }
@@ -231,9 +217,8 @@ const getPieceMovement = function (position) {
               (newPosArr, oldPosArr) => {
                 if (
                   newPosArr[0] == 0 ||
-                    ((newPosArr[0].charAt(0) == "d") !=
-                      (oldPosArr[0].charAt(0) == "d")) &&
-                  newPosArr[0].charAt(newPosArr[0].length)
+                  (newPosArr[0].charAt(0) == "d") !=
+                    (oldPosArr[0].charAt(0) == "d")
                 ) {
                   newPosArr[1] = pieceOnSquare;
                 }
@@ -248,9 +233,8 @@ const getPieceMovement = function (position) {
               (newPosArr, oldPosArr) => {
                 if (
                   newPosArr[0] == 0 ||
-                    ((newPosArr[0].charAt(0) == "d") !=
-                      (oldPosArr[0].charAt(0) == "d")) &&
-                  newPosArr[0].charAt(newPosArr[0].length)
+                  (newPosArr[0].charAt(0) == "d") !=
+                    (oldPosArr[0].charAt(0) == "d")
                 ) {
                   newPosArr[1] = pieceOnSquare;
                 }
@@ -265,19 +249,14 @@ const getPieceMovement = function (position) {
 };
 const showimages = function () {
   linearsearch(boardpositions, (x, y) => {
-    let pieceOnSquare = boardpositions[x][y][0];
-    if (boardpositions[x][y][1] != 0 && boardpositions[x][y][1] != 2) {
-      console.log("showimages was called and " + x, y + "is selectable");
-      document.getElementById(`${x}${y}`).classList.add("selectable");
-    } else if (
-      document.getElementById(`${x}${y}`).classList.contains("selectable")
-    ) {
-      console.log(
-        "showimages was called and " + x,
-        y + "is no longer selectable"
-      );
+    if (boardpositions[x][y][1] != 0 &&
+      boardpositions[x][y][1] != 2) {
+        document.getElementById(`${x}${y}`).classList.add("selectable");
+    }
+    else /*if (document.getElementById(`${x}${y}`).classList.contains("selectable"))*/ {
       document.getElementById(`${x}${y}`).classList.remove("selectable");
     }
+    let pieceOnSquare = boardpositions[x][y][0];
     if (pieceOnSquare != 0 && pieceOnSquare != null) {
       //console.log(pieceOnSquare);
       let temporary = pieceOnSquare.slice(0, pieceOnSquare.length - 1);
@@ -290,14 +269,6 @@ const showimages = function () {
   });
 };
 const changeturnes = function () {
-  /*if (whitesturn){
-    document.getElementById("surrounding").classList.add("blacksturn");
-    linearsearch(boardpositions,(x,y) => document.getElementById(`${x}${y}`).classList.add(blacksturn));
-  }
-  else {
-    document.getElementById("surrounding").classList.remove("blacksturn");
-    linearsearch(boardpositions,(x,y) => document.getElementById(`${x}${y}`).classList.add(blacksturn));
-  }*/
   whitesturn = !whitesturn;
   if (whitesturn) numberofturns++;
   linearsearch(boardpositions, (x, y) => (boardpositions[x][y][1] = 0));
@@ -339,23 +310,6 @@ const checkAllMoves = function (checkforwhite, pieceOnSquare) {
   }
 };
 const movePiece = function (xorigin, yorigin, xdest, ydest) {
-  xdest = Number(xdest);
-  ydest = Number(ydest);
-  xorigin = Number(xorigin);
-  yorigin = Number(yorigin);
-  // irgendein Fehler
-  if (
-    boardpositions[xdest][ydest][1].charAt(
-      boardpositions[xdest][ydest][1].length
-    ) == "e"
-  )
-    boardpositions[xorigin][(ydest + yorigin) / 2][0] ==
-      boardpositions[xdest][ydest][1];
-      //console.log("enpassant auf "+ xorigin,((ydest + yorigin) / 2),boardpositions[xorigin][(ydest + yorigin) / 2][0]);
-  boardpositions[xdest][ydest][1] = boardpositions[xdest][ydest][1].slice(
-    0,
-    boardpositions[xdest][ydest][1].length - 1
-  );
   if (
     boardpositions[xdest][ydest][0] != 0 &&
     boardpositions[xdest][ydest][0] != 2
@@ -387,6 +341,7 @@ const movePiece = function (xorigin, yorigin, xdest, ydest) {
       )
     );
   boardpositions[xorigin][yorigin][0] = 0;
+  showimages();
 };
 const linearsearch = function (three_dim_array, action) {
   //console.log("lin");
@@ -407,19 +362,19 @@ const pawn = function (x, y, action) {
   if (boardpositions[x + 1 * iswhitemult][y][0] == 0) {
     action(boardpositions[x + 1 * iswhitemult][y]);
     console.log(x + 1 * iswhitemult, y);
-    if (
-      x == (boardpositions[x][y][0].charAt(0) == "d" ? 1 : 6) &&
-      boardpositions[x + 2 * iswhitemult][y][0] == 0
-    ) {
+    //console.log(boardpositions[x][y][0].charAt(0) == "d");
+    if (x == ((boardpositions[x][y][0].charAt(0) == "d") ? 1 : 6) && boardpositions[x + 2 * iswhitemult][y][0] == 0 ) {
       action(boardpositions[x + 2 * iswhitemult][y]);
-      console.log(x + 2 * iswhitemult, y, true);
+      console.log(x + 2 * iswhitemult, y);
     }
   }
   if (y <= 6 && boardpositions[x + 1 * iswhitemult][y + 1][0] != 0) {
     action(boardpositions[x + 1 * iswhitemult][y + 1], boardpositions[x][y]);
+    console.log(x + 1 * iswhitemult, y + 1);
   }
   if (y >= 1 && boardpositions[x + 1 * iswhitemult][y - 1][0] != 0) {
     action(boardpositions[x + 1 * iswhitemult][y - 1], boardpositions[x][y]);
+    console.log(x + 1 * iswhitemult, y - 1);
   }
 };
 const knight = function (xx, yy, action) {
@@ -438,6 +393,7 @@ const knight = function (xx, yy, action) {
         y + jindex >= 0 &&
         y + jindex <= 7
       ) {
+        console.log(x + 2 * is_upleft, y + jindex);
         action(
           boardpositions[x + 2 * is_upleft][y + jindex],
           boardpositions[x][y]
@@ -449,6 +405,7 @@ const knight = function (xx, yy, action) {
         x + jindex >= 0 &&
         x + jindex <= 7
       ) {
+        console.log(x + jindex, y + 2 * is_upleft);
         action(
           boardpositions[x + jindex][y + 2 * is_upleft],
           boardpositions[x][y]
@@ -503,6 +460,10 @@ const bishop = function (x, y, action) {
           boardpositions[x][y]
         );
       } else {
+        console.log(
+          x + (index < 3 ? -1 : 1) * jindex,
+          y + (index % 2 == 0 ? -1 : 1) * jindex
+        );
         action(
           boardpositions[x + (index < 3 ? -1 : 1) * jindex][
             y + (index % 2 == 0 ? -1 : 1) * jindex
@@ -512,9 +473,9 @@ const bishop = function (x, y, action) {
         break;
       }
 
-      boardpositions[x + index < 3 ? -1 : 1][
+      /*boardpositions[x + index < 3 ? -1 : 1][
         y + (index % 2) == 0 ? -1 : 1
-      ][0] == 0;
+      ][0] == 0;*/
     }
   }
 };
@@ -553,12 +514,11 @@ const tower = function (x, y, action) {
 };
 const queen = function (x, y, action) {
   console.log("queen");
-  bishop(x, y, action);
-  tower(x, y, action);
+  /* bishop(x,y,action);
+  tower(x,y,action);*/
 };
 const king = function (x, y, action) {
   console.log("king");
-
   /*for (i = -1; i <= 1; i++) {
     for (j = -1; j <= 1; j++) {
       if (i != 0 || j != 0) {
