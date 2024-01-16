@@ -154,8 +154,8 @@ const getPieceMovement = function (position) {
         switch (pieceOnSquareshort) {
           case `${!whitesturn ? "d" : ""}pawn`:
             pawn(
-              position.charAt(0),
-              position.charAt(1),
+              Number(position.charAt(0)),
+              Number(position.charAt(1)),
 
               (newPosArr, oldPosArr) => {
                 if (
@@ -170,8 +170,8 @@ const getPieceMovement = function (position) {
             break;
           case `${!whitesturn ? "d" : ""}tower`:
             tower(
-              position.charAt(0),
-              position.charAt(1),
+              Number(position.charAt(0)),
+              Number(position.charAt(1)),
 
               (newPosArr) => (newPosArr[1] = pieceOnSquare)
             );
@@ -179,8 +179,8 @@ const getPieceMovement = function (position) {
           case `${!whitesturn ? "d" : ""}knight`:
             console.log("it did");
             knight(
-              position.charAt(0),
-              position.charAt(1),
+              Number(position.charAt(0)),
+              Number(position.charAt(1)),
 
               (newPosArr, oldPosArr) => {
                 if (
@@ -195,8 +195,8 @@ const getPieceMovement = function (position) {
             break;
           case `${!whitesturn ? "d" : ""}bishop`:
             bishop(
-              position.charAt(0),
-              position.charAt(1),
+              Number(position.charAt(0)),
+              Number(position.charAt(1)),
 
               (newPosArr, oldPosArr) => {
                 if (
@@ -211,8 +211,8 @@ const getPieceMovement = function (position) {
             break;
           case `${!whitesturn ? "d" : ""}Queen`:
             queen(
-              position.charAt(0),
-              position.charAt(1),
+              Number(position.charAt(0)),
+              Number(position.charAt(1)),
 
               (newPosArr, oldPosArr) => {
                 if (
@@ -227,8 +227,8 @@ const getPieceMovement = function (position) {
             break;
           case `${!whitesturn ? "d" : ""}King`:
             king(
-              position.charAt(0),
-              position.charAt(1),
+              Number(position.charAt(0)),
+              Number(position.charAt(1)),
 
               (newPosArr, oldPosArr) => {
                 if (
@@ -249,11 +249,9 @@ const getPieceMovement = function (position) {
 };
 const showimages = function () {
   linearsearch(boardpositions, (x, y) => {
-    if (boardpositions[x][y][1] != 0 &&
-      boardpositions[x][y][1] != 2) {
-        document.getElementById(`${x}${y}`).classList.add("selectable");
-    }
-    else /*if (document.getElementById(`${x}${y}`).classList.contains("selectable"))*/ {
+    if (boardpositions[x][y][1] != 0 && boardpositions[x][y][1] != 2) {
+      document.getElementById(`${x}${y}`).classList.add("selectable");
+    } /*if (document.getElementById(`${x}${y}`).classList.contains("selectable"))*/ else {
       document.getElementById(`${x}${y}`).classList.remove("selectable");
     }
     let pieceOnSquare = boardpositions[x][y][0];
@@ -354,8 +352,6 @@ const linearsearch = function (three_dim_array, action) {
 
 const pawn = function (x, y, action) {
   //enpassant einfügen
-  x = Number(x);
-  y = Number(y);
   let iswhitemult = boardpositions[x][y][0].charAt(0) != "d" ? -1 : 1;
   console.log("pawn" + iswhitemult);
   //x und y sind im gesamten code vertauscht
@@ -363,7 +359,10 @@ const pawn = function (x, y, action) {
     action(boardpositions[x + 1 * iswhitemult][y]);
     console.log(x + 1 * iswhitemult, y);
     //console.log(boardpositions[x][y][0].charAt(0) == "d");
-    if (x == ((boardpositions[x][y][0].charAt(0) == "d") ? 1 : 6) && boardpositions[x + 2 * iswhitemult][y][0] == 0 ) {
+    if (
+      x == (boardpositions[x][y][0].charAt(0) == "d" ? 1 : 6) &&
+      boardpositions[x + 2 * iswhitemult][y][0] == 0
+    ) {
       action(boardpositions[x + 2 * iswhitemult][y]);
       console.log(x + 2 * iswhitemult, y);
     }
@@ -377,10 +376,9 @@ const pawn = function (x, y, action) {
     console.log(x + 1 * iswhitemult, y - 1);
   }
 };
-const knight = function (xx, yy, action) {
+const knight = function (x, y, action) {
   //klappt
-  let x = parseInt(xx);
-  let y = parseInt(yy);
+ 
   for (let index = 0; index < 4; index++) {
     for (let jindex = -1; jindex < 2; jindex += 2) {
       let isxcoor = index % 2 == 0;
@@ -427,8 +425,6 @@ const knight = function (xx, yy, action) {
 */
 const bishop = function (x, y, action) {
   //works except enpassant
-  x = Number(x);
-  y = Number(y);
   console.log("bishop");
   for (let index = 1; index <= 4; index++) {
     for (let jindex = 1; true; jindex++) {
@@ -481,8 +477,6 @@ const bishop = function (x, y, action) {
 };
 const tower = function (x, y, action) {
   console.log("tower");
-  x = Number(x);
-  y = Number(y);
   for (let index = 0; index < 4; index++) {
     console.log("a");
     for (let jindex = 1; true; jindex++) {
@@ -514,22 +508,19 @@ const tower = function (x, y, action) {
 };
 const queen = function (x, y, action) {
   console.log("queen");
-  /* bishop(x,y,action);
-  tower(x,y,action);*/
+  bishop(x,y,action);
+  tower(x,y,action);
 };
 const king = function (x, y, action) {
   console.log("king");
-  /*for (i = -1; i <= 1; i++) {
+  for (i = -1; i <= 1; i++) {
     for (j = -1; j <= 1; j++) {
       if (i != 0 || j != 0) {
-          let named = null;
-          if (!whitesturn) {
-            named = 'd';
-          }
-          boardpositions[i][j][1] = "${named}k";
+        if (x + i <= 7 && x + i >= 0 && y + j <= 7 && y + j >= 0) {
+          console.log((x+i),(y+j));
+          action(boardpositions[x + i][y + j], boardpositions[x][y]);
         }
-        
-      
+      }
     }
-  }*/
+  }
 };
