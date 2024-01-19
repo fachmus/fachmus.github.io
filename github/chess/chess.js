@@ -105,6 +105,7 @@ const startingboardpositions = [
     ["tower2", 0],
   ],
 ];
+// castling and enpassant
 const startgame = function () {
   if (!gamehasstarted) {
     boardpositions = startingboardpositions;
@@ -119,6 +120,7 @@ const startgame = function () {
 
 const getPieceMovement = function (position) {
   console.log("button pressed");
+  console.log(boardpositions[position.charAt(0)][position.charAt(1)]);
   if (gamehasstarted) {
     console.log("game has already started");
     let pieceOnSquare =
@@ -136,12 +138,21 @@ const getPieceMovement = function (position) {
       linearsearch(boardpositions, (x, y) => {
         if (
           boardpositions[x][y][0] ==
-          boardpositions[position.charAt(0)][position.charAt(1)][1]
+          (boardpositions[position.charAt(0)][position.charAt(1)][1].charAt(
+            0
+          ) == "c"
+            ? boardpositions[position.charAt(0)][position.charAt(1)][1].slice(1)
+            : boardpositions[position.charAt(0)][position.charAt(1)][1])
         ) {
           origin = [x, y];
         }
       });
-      movePiece(origin[0], origin[1], position.charAt(0), position.charAt(1));
+      movePiece(
+        Number(origin[0]),
+        Number(origin[1]),
+        Number(position.charAt(0)),
+        Number(position.charAt(1))
+      );
       changeturnes();
     } else {
       console.log("no on will move there");
@@ -176,8 +187,6 @@ const getPieceMovement = function (position) {
               (newPosArr) => (newPosArr[1] = pieceOnSquare),
               (newPosArr, oldPosArr, enpPosArr) => {
                 newPosArr[1] = pieceOnSquare;
-                // mus  in move pieces passieren :enpPosArr.push(pieceOnSquare);
-                //enPosArr
               }
             );
             break;
@@ -186,7 +195,15 @@ const getPieceMovement = function (position) {
               Number(position.charAt(0)),
               Number(position.charAt(1)),
 
-              (newPosArr) => (newPosArr[1] = pieceOnSquare)
+              (newPosArr, oldPosArr) => {
+                if (
+                  newPosArr[0] == 0 ||
+                  (newPosArr[0].charAt(0) == "d") !=
+                    (oldPosArr[0].charAt(0) == "d")
+                ) {
+                  newPosArr[1] = pieceOnSquare;
+                }
+              }
             );
             break;
           case `${!whitesturn ? "d" : ""}knight`:
@@ -253,8 +270,8 @@ const getPieceMovement = function (position) {
                 }
               },
               (newPosArr, oldPosArr) => {
-                console.log(oldPosArr[0] + "c");
-                newPosArr[1] = oldPosArr[0] + "c";
+                console.log("c" + oldPosArr[0]);
+                newPosArr[1] = "c" + oldPosArr[0];
               }
             );
             break;
@@ -287,25 +304,29 @@ const changeturnes = function () {
   whitesturn = !whitesturn;
   if (whitesturn) numberofturns++;
   linearsearch(boardpositions, (x, y) => (boardpositions[x][y][1] = 0));
-linearsearch(boardpositions,(x,y) => {
-  // finde alle arrays mit mehr als zwei und entsprechendem ersten Buchstabe lösche enpassant
-  if (boardpositions[x][y].length > 2 && boardpositions[x][y][2].charAt(0) == (whitesturn ? "d": "p")) {
-boardpositions[x][y].pop();
-  }})
+  linearsearch(boardpositions, (x, y) => {
+    // finde alle arrays mit mehr als zwei und entsprechendem ersten Buchstabe lösche enpassant
+    if (
+      boardpositions[x][y].length > 2 &&
+      boardpositions[x][y][2].charAt(0) == (whitesturn ? "p" : "d")
+    ) {
+      boardpositions[x][y].pop();
+    }
+  });
   //clearsallmoves
   showimages();
   linearsearch(boardpositions, (x, y) => {
     let pieceOnSquare = boardpositions[x][y][0];
-    checkAllMoves(whitesturn, pieceOnSquare);
+    //checkAllMoves(whitesturn, pieceOnSquare);
   });
   linearsearch(boardpositions, (x, y) => (boardpositions[x][y][1] = 0));
   linearsearch(boardpositions, (x, y) => {
     let pieceOnSquare = boardpositions[x][y][0];
-    checkAllMoves(!checkAllMoves, pieceOnSquare);
+    //checkAllMoves(!whitesturn, pieceOnSquare);
   });
 };
 const checkAllMoves = function (checkforwhite, pieceOnSquare) {
-  if (pieceOnSquare != 0) {
+  /*if (pieceOnSquare != 0) {
     let pieceOnSquareshort = pieceOnSquare.slice(0, pieceOnSquare - 1);
     switch (pieceOnSquareshort) {
       case `${checkforwhite ? "d" : ""}pawn`:
@@ -327,30 +348,102 @@ const checkAllMoves = function (checkforwhite, pieceOnSquare) {
         king(x, y, (newPosArr) => (newPosArr[1] = "2"));
         break;
     }
-  }
+  }*/
 };
 const movePiece = function (xorigin, yorigin, xdest, ydest) {
+  let pieceOnSquare = boardpositions[xorigin][yorigin][0];
+  if (!dKingmoved && pieceOnSquare == "dKing1") {
+    dKingmoved != dKingmoved;
+  }
+  if (!Kingmoved && pieceOnSquare == "King1") {
+    Kingmoved != Kingmoved;
+  }
+  if (!dtower1moved && pieceOnSquare == "dtower1") {
+    dtower1moved != dtower1moved;
+  }
+  if (!dtower2moved && pieceOnSquare == "dtower2") {
+    dtower2moved != dtower2moved;
+  }
+  if (!tower1moved && pieceOnSquare == "tower1") {
+    tower1moved != tower1moved;
+  }
+  if (!tower2moved && pieceOnSquare == "tower2") {
+    tower2moved != tower2moved;
+  }
+  console.log(
+    boardpositions[xorigin][yorigin][0].charAt(2) ==
+      (boardpositions[xorigin][yorigin][0].charAt(0) == "d" ? "a" : "w")
+  );
   if (
-    boardpositions[xorigin][yorigin][0].charAt(3) ==
+    boardpositions[xorigin][yorigin][0].charAt(2) ==
+      (boardpositions[xorigin][yorigin][0].charAt(0) == "d" ? "a" : "w") &&
+    ((xorigin + xdest) / 2) % 1 == 0
+  ) {
+    let xen = (xorigin + xdest) / 2;
+    console.log(xen);
+    boardpositions[xen][yorigin].push(boardpositions[xorigin][yorigin][0]);
+    console.log(boardpositions[xen][yorigin]);
+  }
+  if (
+    boardpositions[xorigin][yorigin][0].charAt(2) ==
       (boardpositions[xorigin][yorigin][0].charAt(0) == "d" ? "a" : "w") &&
     boardpositions[xdest][ydest].length > 2
   ) {
+    console.log("enpassant");
     linearsearch(boardpositions, (x, y) => {
       if (boardpositions[x][y][0] == boardpositions[xdest][ydest][2]) {
+        console.log(x, y);
+        document
+          .getElementById(`${x}${y}`)
+          .classList.remove(
+            boardpositions[x][y][0].slice(0, boardpositions[x][y][0].length - 1)
+          );
         boardpositions[x][y][0] = 0;
       }
     });
-  } else if (
-    boardpositions[xdest][ydest][1].charAt(
-      boardpositions[xdest][ydest][1].length - 1
-    ) == "c"
-  ) {
-
+  } else if (boardpositions[xdest][ydest][1].charAt(0) == "c") {
+    if (yorigin < ydest) {
+      boardpositions[xdest][ydest - 1][0] = boardpositions[xdest][ydest + 2][0];
+      document
+        .getElementById(`${xdest}${ydest - 1}`)
+        .classList.add(
+          boardpositions[xdest][ydest + 2][0].slice(
+            0,
+            boardpositions[xdest][ydest + 2][0].length - 1
+          )
+        );
+      document
+        .getElementById(`${xdest}${ydest + 2}`)
+        .classList.remove(
+          boardpositions[xdest][ydest + 2][0].slice(
+            0,
+            boardpositions[xdest][ydest + 2][0].length - 1
+          )
+        );
+      boardpositions[xdest][ydest + 2][0] = 0;
+    } else {
+      boardpositions[xdest][ydest + 1][0] = boardpositions[xdest][ydest + 2][0];
+      document
+        .getElementById(`${xdest}${ydest + 1}`)
+        .classList.add(
+          boardpositions[xdest][ydest - 1][0].slice(
+            0,
+            boardpositions[xdest][ydest - 1][0].length - 1
+          )
+        );
+      document
+        .getElementById(`${xdest}${ydest - 1}`)
+        .classList.remove(
+          boardpositions[xdest][ydest - 1][0].slice(
+            0,
+            boardpositions[xdest][ydest - 1][0].length - 1
+          )
+        );
+      boardpositions[xdest][ydest - 1][0] = 0;
+    }
   }
-  if (
-    boardpositions[xdest][ydest][0] != 0 &&
-    boardpositions[xdest][ydest][0] != 2
-  ) {
+
+  if (boardpositions[xdest][ydest][0] != 0) {
     document
       .getElementById(`${xdest}${ydest}`)
       .classList.remove(
@@ -360,6 +453,7 @@ const movePiece = function (xorigin, yorigin, xdest, ydest) {
         )
       );
   }
+  // enpassant in push array
   boardpositions[xdest][ydest][0] = boardpositions[xorigin][yorigin][0];
   document
     .getElementById(`${xdest}${ydest}`)
@@ -403,15 +497,27 @@ const pawn = function (x, y, action, action2, action3) {
       boardpositions[x + 2 * iswhitemult][y][0] == 0
     ) {
       let ex = x + 1 * iswhitemult;
-      action3(boardpositions[x + 2 * iswhitemult][y],boardpositions[x][y], boardpositions[ex][y]);
+      action3(
+        boardpositions[x + 2 * iswhitemult][y],
+        boardpositions[x][y],
+        boardpositions[ex][y]
+      );
       console.log(x + 2 * iswhitemult, y, "enpassant wäre auf ", ex);
     }
   }
-  if (y <= 6 && boardpositions[x + 1 * iswhitemult][y + 1][0] != 0) {
+  if (
+    y <= 6 &&
+    (boardpositions[x + 1 * iswhitemult][y + 1][0] != 0 ||
+      boardpositions[x + 1 * iswhitemult][y + 1].length > 2)
+  ) {
     action(boardpositions[x + 1 * iswhitemult][y + 1], boardpositions[x][y]);
     console.log(x + 1 * iswhitemult, y + 1);
   }
-  if (y >= 1 && boardpositions[x + 1 * iswhitemult][y - 1][0] != 0) {
+  if (
+    y >= 1 &&
+    (boardpositions[x + 1 * iswhitemult][y - 1][0] != 0 ||
+      boardpositions[x + 1 * iswhitemult][y - 1].length > 2)
+  ) {
     action(boardpositions[x + 1 * iswhitemult][y - 1], boardpositions[x][y]);
     console.log(x + 1 * iswhitemult, y - 1);
   }
@@ -553,49 +659,50 @@ const queen = function (x, y, action) {
 };
 const king = function (x, y, action, action2) {
   console.log("king");
+  if (whitesturn && !Kingmoved) {
+    if (
+      !dtower1moved &&
+      boardpositions[7][1][0] == 0 &&
+      boardpositions[7][2][0] == 0
+    ) {
+      console.log("castlpossible");
+      action2(boardpositions[x][y - 2], boardpositions[x][y]);
+    }
+
+    if (
+      !dtower2moved &&
+      boardpositions[7][4][0] == 0 &&
+      boardpositions[7][5][0] == 0 &&
+      boardpositions[7][6][0] == 0
+    ) {
+      console.log("castlpossible");
+      action2(boardpositions[x][y + 2], boardpositions[x][y]);
+    }
+  } else if (!whitesturn && !dKingmoved) {
+    if (
+      !dtower1moved &&
+      boardpositions[0][1][0] == 0 &&
+      boardpositions[0][2][0] == 0
+    ) {
+      console.log("castlpossible");
+      action2(boardpositions[x][y - 2], boardpositions[x][y]);
+    }
+    if (
+      !dtower2moved &&
+      boardpositions[0][4][0] == 0 &&
+      boardpositions[0][5][0] == 0 &&
+      boardpositions[0][6][0] == 0
+    ) {
+      console.log("castlpossible");
+      action2(boardpositions[x][y + 2], boardpositions[x][y]);
+    }
+  }
   for (i = -1; i <= 1; i++) {
     for (j = -1; j <= 1; j++) {
       if (i != 0 || j != 0) {
         if (x + i <= 7 && x + i >= 0 && y + j <= 7 && y + j >= 0) {
           console.log(x + i, y + j);
           action(boardpositions[x + i][y + j], boardpositions[x][y]);
-        }
-        if (whitesturn && !Kingmoved) {
-          if (
-            !dtower1moved &&
-            boardpositions[7][1][0] == 0 &&
-            boardpositions[7][2][0] == 0
-          ) {
-            console.log("castlpossible");
-            action2(boardpositions[x][y - 2], boardpositions[x][y]);
-          }
-          if (
-            !dtower2moved &&
-            boardpositions[7][4][0] == 0 &&
-            boardpositions[7][5][0] == 0 &&
-            boardpositions[7][6][0] == 0
-          ) {
-            console.log("castlpossible");
-            action2(boardpositions[x][y + 2], boardpositions[x][y]);
-          }
-        } else if (!whitesturn && !dKingmoved) {
-          if (
-            !dtower1moved &&
-            boardpositions[0][1][0] == 0 &&
-            boardpositions[0][2][0] == 0
-          ) {
-            console.log("castlpossible");
-            action2(boardpositions[x][y - 2], boardpositions[x][y]);
-          }
-          if (
-            !dtower2moved &&
-            boardpositions[0][4][0] == 0 &&
-            boardpositions[0][5][0] == 0 &&
-            boardpositions[0][6][0] == 0
-          ) {
-            console.log("castlpossible");
-            action2(boardpositions[x][y + 2], boardpositions[x][y]);
-          }
         }
       }
     }
