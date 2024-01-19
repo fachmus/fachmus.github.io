@@ -374,33 +374,38 @@ const movePiece = function (xorigin, yorigin, xdest, ydest) {
     boardpositions[xorigin][yorigin][0].charAt(2) ==
       (boardpositions[xorigin][yorigin][0].charAt(0) == "d" ? "a" : "w")
   );
+
   if (
     boardpositions[xorigin][yorigin][0].charAt(2) ==
-      (boardpositions[xorigin][yorigin][0].charAt(0) == "d" ? "a" : "w") &&
-    ((xorigin + xdest) / 2) % 1 == 0
+    (boardpositions[xorigin][yorigin][0].charAt(0) == "d" ? "a" : "w")
   ) {
-    let xen = (xorigin + xdest) / 2;
-    console.log(xen);
-    boardpositions[xen][yorigin].push(boardpositions[xorigin][yorigin][0]);
-    console.log(boardpositions[xen][yorigin]);
-  }
-  if (
-    boardpositions[xorigin][yorigin][0].charAt(2) ==
-      (boardpositions[xorigin][yorigin][0].charAt(0) == "d" ? "a" : "w") &&
-    boardpositions[xdest][ydest].length > 2
-  ) {
-    console.log("enpassant");
-    linearsearch(boardpositions, (x, y) => {
-      if (boardpositions[x][y][0] == boardpositions[xdest][ydest][2]) {
-        console.log(x, y);
-        document
-          .getElementById(`${x}${y}`)
-          .classList.remove(
-            boardpositions[x][y][0].slice(0, boardpositions[x][y][0].length - 1)
-          );
-        boardpositions[x][y][0] = 0;
-      }
-    });
+    if (xdest == boardpositions[xorigin][yorigin][0].charAt(0) == "d" ? 7 : 0) {
+      document.getElementById().classList.remove()
+      // transutation
+    }  
+    if (((xorigin + xdest) / 2) % 1 == 0) {
+      let xen = (xorigin + xdest) / 2;
+      console.log(xen);
+      boardpositions[xen][yorigin].push(boardpositions[xorigin][yorigin][0]);
+      console.log(boardpositions[xen][yorigin]);
+    }
+    if (boardpositions[xdest][ydest].length > 2) {
+      console.log("enpassant");
+      linearsearch(boardpositions, (x, y) => {
+        if (boardpositions[x][y][0] == boardpositions[xdest][ydest][2]) {
+          console.log(x, y);
+          document
+            .getElementById(`${x}${y}`)
+            .classList.remove(
+              boardpositions[x][y][0].slice(
+                0,
+                boardpositions[x][y][0].length - 1
+              )
+            );
+          boardpositions[x][y][0] = 0;
+        }
+      });
+    }
   } else if (boardpositions[xdest][ydest][1].charAt(0) == "c") {
     if (yorigin < ydest) {
       boardpositions[xdest][ydest - 1][0] = boardpositions[xdest][ydest + 2][0];
