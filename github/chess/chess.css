@@ -16,6 +16,7 @@ button {
     display: grid;
     position: fixed;
     width: 430px;
+  heigth:430px;
     margin-top: 160px;
 }
 div{
