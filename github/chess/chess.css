@@ -9,12 +9,16 @@ button {
   background-size: cover;
   background-repeat: no-repeat;
 }
+.chessfield {
+  width: 430px;
+  heigth: 54;
 
+}
 #surrounding {
   display: grid;
-  position: fixed;
+  position: fixed;‚
   width: 430px;
-  height: 430px;
+  height: 432px;
   margin-top: 160px;
 }
 div {
