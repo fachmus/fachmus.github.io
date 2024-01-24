@@ -11,7 +11,9 @@ button {
 }
 .chessboard {
   width: 430px;
-  heigth: 54;
+  heigth: 54px;
+  display: flex;
+  flex-direction:row;
 
 }
 #surrounding {
