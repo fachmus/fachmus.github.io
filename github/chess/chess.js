@@ -35,7 +35,7 @@ const startingboardpositions = [
     ["dtower2", 0],
   ],
   [
-    ["pawn1", 0],
+    ["dpawn1", 0],
     ["dpawn2", 0],
     ["dpawn3", 0],
     ["dpawn4", 0],
@@ -85,7 +85,7 @@ const startingboardpositions = [
     [0, 0],
   ],
   [
-    ["dpawn1", 0],
+    ["pawn1", 0],
     ["pawn2", 0],
     ["pawn3", 0],
     ["pawn4", 0],
@@ -120,8 +120,8 @@ const startgame = function () {
 
 const getPieceMovement = function (position) {
   console.log("button pressed");
-  console.log(boardpositions[position.charAt(0)][position.charAt(1)]);
   if (gamehasstarted) {
+    console.log(boardpositions[position.charAt(0)][position.charAt(1)]);
     console.log("game has already started");
     let pieceOnSquare =
       boardpositions[position.charAt(0)][position.charAt(1)][0];
@@ -281,20 +281,23 @@ const getPieceMovement = function (position) {
 };
 const showimages = function () {
   linearsearch(boardpositions, (x, y) => {
-    if (boardpositions[x][y][1] != 0 && boardpositions[x][y][1] != 2) {
+    if (boardpositions[x][y][1] != 0) {
       document.getElementById(`${x}${y}`).classList.add("selectable");
     } /*if (document.getElementById(`${x}${y}`).classList.contains("selectable"))*/ else {
       document.getElementById(`${x}${y}`).classList.remove("selectable");
     }
     let pieceOnSquare = boardpositions[x][y][0];
     if (pieceOnSquare != 0 && pieceOnSquare != null) {
+      console.log(x, y);
       //console.log(pieceOnSquare);
       let temporary = pieceOnSquare.slice(0, pieceOnSquare.length - 1);
       pieceOnSquare = temporary;
 
       //console.log(`${x}${y}`);
       //console.log(pieceOnSquare);
+      console.log(pieceOnSquare);
       document.getElementById(`${x}${y}`).classList.add(pieceOnSquare);
+      console.log(document.getElementById(`${x}${y}`).classList);
     }
   });
 };
@@ -394,7 +397,9 @@ const movePiece = function (xorigin, yorigin, xdest, ydest) {
         .addEventListener("click", continueTransmutation);
       function continueTransmutation() {
         console.log("success", xorigin, yorigin);
-        let newPiece = (pieceOnSquare.charAt(0) == "d" ? "d" : "") + String(document.getElementById("paw1").value);
+        let newPiece =
+          (pieceOnSquare.charAt(0) == "d" ? "d" : "") +
+          String(document.getElementById("paw1").value);
         console.log(
           newPiece +
             (String(pieceOnSquare.charAt(pieceOnSquare.length - 1) + 2) % 10)
@@ -411,9 +416,7 @@ const movePiece = function (xorigin, yorigin, xdest, ydest) {
           .classList.add(pieceOnSquare.substring(0, pieceOnSquare.length - 1));
         document
           .getElementById(`${xorigin}${yorigin}`)
-          .classList.remove(
-            (newPiece.charAt(0) == "d" ? "d": "")+"pawn"
-          );
+          .classList.remove((newPiece.charAt(0) == "d" ? "d" : "") + "pawn");
         boardpositions[xorigin][yorigin][0] = 0;
         showimages();
       }

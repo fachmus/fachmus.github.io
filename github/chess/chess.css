@@ -6,7 +6,7 @@ button {
   display: inline-block;
   position: relative;
   background-blend-mode: darken;
-  background-size: cove;
+  background-size: cover;
   background-repeat: no-repeat;
 }
 
@@ -136,6 +136,7 @@ body {
   visibility: hidden;
   transition: ease-in;
 }
+
 
 .pawn {
   background-image: url("pawn.png");
