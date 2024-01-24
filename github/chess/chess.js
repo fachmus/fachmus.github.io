@@ -12,6 +12,7 @@ dann werden diese markierungen gelöscht
 wenn der Zug wechselt werden alle Felder die abgedeckt
 sind mit einer zwei versehen
 */
+let breakout = false;
 let whitesturn = true;
 let numberofturns = 1;
 let gamehasstarted = false;
@@ -126,7 +127,10 @@ const getPieceMovement = function (position) {
     let pieceOnSquare =
       boardpositions[position.charAt(0)][position.charAt(1)][0];
     console.log("piecesOnSquare is " + pieceOnSquare);
-    if (boardpositions[position.charAt(0)][position.charAt(1)][1] != 0) {
+    if (
+      boardpositions[position.charAt(0)][position.charAt(1)][1] != 0 &&
+      boardpositions[position.charAt(0)][position.charAt(1)][1] != 2
+    ) {
       console.log(
         boardpositions[position.charAt(0)][position.charAt(1)][1] +
           " could move there"
@@ -188,22 +192,6 @@ const getPieceMovement = function (position) {
               }
             );
             break;
-          case `${!whitesturn ? "d" : ""}tower`:
-            tower(
-              Number(position.charAt(0)),
-              Number(position.charAt(1)),
-
-              (newPosArr, oldPosArr) => {
-                if (
-                  newPosArr[0] == 0 ||
-                  (newPosArr[0].charAt(0) == "d") !=
-                    (oldPosArr[0].charAt(0) == "d")
-                ) {
-                  newPosArr[1] = pieceOnSquare;
-                }
-              }
-            );
-            break;
           case `${!whitesturn ? "d" : ""}knight`:
             console.log("it did");
             knight(
@@ -226,7 +214,7 @@ const getPieceMovement = function (position) {
               Number(position.charAt(0)),
               Number(position.charAt(1)),
 
-              (newPosArr, oldPosArr) => {
+              (newPosArr, oldPosArr, x, y) => {
                 if (
                   newPosArr[0] == 0 ||
                   (newPosArr[0].charAt(0) == "d") !=
@@ -234,11 +222,15 @@ const getPieceMovement = function (position) {
                 ) {
                   newPosArr[1] = pieceOnSquare;
                 }
+                if (newPosArr[0] != 0) {
+                  breakout = true;
+                  console.log(breakout);
+                }
               }
             );
             break;
-          case `${!whitesturn ? "d" : ""}Queen`:
-            queen(
+          case `${!whitesturn ? "d" : ""}tower`:
+            tower(
               Number(position.charAt(0)),
               Number(position.charAt(1)),
 
@@ -249,6 +241,30 @@ const getPieceMovement = function (position) {
                     (oldPosArr[0].charAt(0) == "d")
                 ) {
                   newPosArr[1] = pieceOnSquare;
+                }
+                if (newPosArr[0] != 0) {
+                  breakout = true;
+                  console.log(breakout);
+                }
+              }
+            );
+            break;
+          case `${!whitesturn ? "d" : ""}Queen`:
+            queen(
+              Number(position.charAt(0)),
+              Number(position.charAt(1)),
+
+              (newPosArr, oldPosArr, x, y) => {
+                if (
+                  newPosArr[0] == 0 ||
+                  (newPosArr[0].charAt(0) == "d") !=
+                    (oldPosArr[0].charAt(0) == "d")
+                ) {
+                  newPosArr[1] = pieceOnSquare;
+                }
+                if (newPosArr[0] != 0) {
+                  breakout = true;
+                  console.log(breakout);
                 }
               }
             );
@@ -260,9 +276,10 @@ const getPieceMovement = function (position) {
 
               (newPosArr, oldPosArr) => {
                 if (
-                  newPosArr[0] == 0 ||
-                  (newPosArr[0].charAt(0) == "d") !=
-                    (oldPosArr[0].charAt(0) == "d")
+                  (newPosArr[0] == 0 ||
+                    (newPosArr[0].charAt(0) == "d") !=
+                      (oldPosArr[0].charAt(0) == "d")) &&
+                  newPosArr[1] != 2
                 ) {
                   newPosArr[1] = pieceOnSquare;
                 }
@@ -281,23 +298,23 @@ const getPieceMovement = function (position) {
 };
 const showimages = function () {
   linearsearch(boardpositions, (x, y) => {
-    if (boardpositions[x][y][1] != 0) {
+    if (boardpositions[x][y][1] != 0 && boardpositions[x][y][1] != 2) {
       document.getElementById(`${x}${y}`).classList.add("selectable");
     } /*if (document.getElementById(`${x}${y}`).classList.contains("selectable"))*/ else {
       document.getElementById(`${x}${y}`).classList.remove("selectable");
     }
     let pieceOnSquare = boardpositions[x][y][0];
     if (pieceOnSquare != 0 && pieceOnSquare != null) {
-      console.log(x, y);
+      //console.log(x, y);
       //console.log(pieceOnSquare);
       let temporary = pieceOnSquare.slice(0, pieceOnSquare.length - 1);
       pieceOnSquare = temporary;
 
       //console.log(`${x}${y}`);
       //console.log(pieceOnSquare);
-      console.log(pieceOnSquare);
+      //console.log(pieceOnSquare);
       document.getElementById(`${x}${y}`).classList.add(pieceOnSquare);
-      console.log(document.getElementById(`${x}${y}`).classList);
+      //console.log(document.getElementById(`${x}${y}`).classList);
     }
   });
 };
@@ -326,31 +343,7 @@ const changeturnes = function () {
     //checkAllMoves(!whitesturn, pieceOnSquare);
   });
 };
-const checkAllMoves = function (checkforwhite, pieceOnSquare) {
-  /*if (pieceOnSquare != 0) {
-    let pieceOnSquareshort = pieceOnSquare.slice(0, pieceOnSquare - 1);
-    switch (pieceOnSquareshort) {
-      case `${checkforwhite ? "d" : ""}pawn`:
-        pawn(x, y, (newPosArr) => (newPosArr[1] = "2"));
-        break;
-      case `${checkforwhite ? "d" : ""}tower`:
-        tower(x, y, (newPosArr) => (newPosArr[1] = "2"));
-        break;
-      case `${checkforwhite ? "d" : ""}knight`:
-        knight(x, y, (newPosArr) => (newPosArr[1] = "2"));
-        break;
-      case `${checkforwhite ? "d" : ""}bishop`:
-        bishop(x, y, (newPosArr) => (newPosArr[1] = "2"));
-        break;
-      case `${checkforwhite ? "d" : ""}Queen`:
-        queen(x, y, (newPosArr) => (newPosArr[1] = "2"));
-        break;
-      case `${checkforwhite ? "d" : ""}King`:
-        king(x, y, (newPosArr) => (newPosArr[1] = "2"));
-        break;
-    }
-  }*/
-};
+
 const movePiece = function (xorigin, yorigin, xdest, ydest) {
   let pieceOnSquare = boardpositions[xorigin][yorigin][0];
   if (!dKingmoved && pieceOnSquare == "dKing1") {
@@ -372,13 +365,13 @@ const movePiece = function (xorigin, yorigin, xdest, ydest) {
     tower2moved != tower2moved;
   }
   console.log(
-    boardpositions[xorigin][yorigin][0].charAt(2) ==
-      (boardpositions[xorigin][yorigin][0].charAt(0) == "d" ? "a" : "w")
+    boardpositions[xorigin][yorigin][0].charAt(1) ==
+      (boardpositions[xorigin][yorigin][0].charAt(0) == "d" ? "P" : "a")
   );
 
   if (
-    boardpositions[xorigin][yorigin][0].charAt(2) ==
-    (boardpositions[xorigin][yorigin][0].charAt(0) == "d" ? "a" : "w")
+    boardpositions[xorigin][yorigin][0].charAt(1) ==
+    (boardpositions[xorigin][yorigin][0].charAt(0) == "d" ? "P" : "a")
   ) {
     console.log(
       xdest,
@@ -654,7 +647,7 @@ const bishop = function (x, y, action) {
           ],
           boardpositions[x][y]
         );
-        break;
+        if (breakout) break;
       }
 
       /*boardpositions[x + index < 3 ? -1 : 1][
@@ -666,9 +659,7 @@ const bishop = function (x, y, action) {
 const tower = function (x, y, action) {
   console.log("tower");
   for (let index = 0; index < 4; index++) {
-    console.log("a");
     for (let jindex = 1; true; jindex++) {
-      console.log("b");
       let isxcoor = index % 2 == 0 ? true : false;
       let is_upleft = index < 2 ? -1 : 1;
       console.log(isxcoor + "\n" + is_upleft);
@@ -678,16 +669,20 @@ const tower = function (x, y, action) {
         x + jindex * is_upleft >= 0
       ) {
         console.log(x + jindex * is_upleft, y);
+        breakout = false;
         action(boardpositions[x + jindex * is_upleft][y], boardpositions[x][y]);
-        if (boardpositions[x + jindex * is_upleft][y][0] != 0) break;
+        console.log(breakout);
+        if (breakout) break;
       } else if (
         !isxcoor &&
         y + jindex * is_upleft <= 7 &&
         y + jindex * is_upleft >= 0
       ) {
         console.log(x, y + jindex * is_upleft);
+        breakout = false;
         action(boardpositions[x][y + jindex * is_upleft], boardpositions[x][y]);
-        if (boardpositions[x][y + jindex * is_upleft][0] != 0) break;
+        console.log(breakout);
+        if (breakout) break;
       } else {
         break;
       }
@@ -701,11 +696,59 @@ const queen = function (x, y, action) {
 };
 const king = function (x, y, action, action2) {
   console.log("king");
+  
+  // checkAllMoves
+  linearsearch(boardpositions,(x,y) => {
+  let pieceOnSquare = boardpositions[x][y][0];
+  if(pieceOnSquare != 0) {
+  let checkforwhite = boardpositions[x][y][0].charAt(0) != "d";
+  breakout == false;
+  let pieceOnSquareshort = pieceOnSquare.slice(0, pieceOnSquare.length - 1);
+  console.log(pieceOnSquareshort);
+  switch (pieceOnSquareshort) {
+    case `${checkforwhite ? "d" : ""}pawn`:
+      pawn(x, y, (newPosArr) => (newPosArr[1] = "2"));
+      break;
+    case `${checkforwhite ? "d" : ""}knight`:
+      knight(x, y, (newPosArr) => (newPosArr[1] = "2"));
+      break;
+    case `${checkforwhite ? "d" : ""}bishop`:
+      bishop(x, y, (newPosArr) => {
+        newPosArr[1] = "2";
+        if (newPosArr[0] != 0) {
+          breakout == true;
+        }
+      });
+      break;
+    case `${checkforwhite ? "d" : ""}tower`:
+      tower(x, y, (newPosArr) => {
+        newPosArr[1] = "2";
+        if (newPosArr[0] != 0) {
+          breakout == true;
+        }
+      });
+      break;
+    case `${checkforwhite ? "d" : ""}Queen`:
+      queen(x, y, (newPosArr) => {
+        newPosArr[1] = "2";
+        console.log(newPosArr);
+        if (newPosArr[0] != 0) {
+          breakout == true;
+        }
+      });
+      break;
+    case `${checkforwhite ? "d" : ""}King`:
+      king(x, y, (newPosArr) => (newPosArr[1] = "2"));
+      break;
+  }
+  console.log("checked for " + pieceOnSquare);}});
   if (whitesturn && !Kingmoved) {
     if (
       !dtower1moved &&
       boardpositions[7][1][0] == 0 &&
-      boardpositions[7][2][0] == 0
+      boardpositions[7][2][0] == 0 &&
+      boardpositions[7][1][1] != 2 &&
+      boardpositions[7][2][1] != 2
     ) {
       console.log("castlpossible");
       action2(boardpositions[x][y - 2], boardpositions[x][y]);
@@ -715,7 +758,10 @@ const king = function (x, y, action, action2) {
       !dtower2moved &&
       boardpositions[7][4][0] == 0 &&
       boardpositions[7][5][0] == 0 &&
-      boardpositions[7][6][0] == 0
+      boardpositions[7][6][0] == 0 &&
+      boardpositions[7][4][1] != 2 &&
+      boardpositions[7][5][1] != 2 &&
+      boardpositions[7][6][1] != 2
     ) {
       console.log("castlpossible");
       action2(boardpositions[x][y + 2], boardpositions[x][y]);
@@ -724,7 +770,9 @@ const king = function (x, y, action, action2) {
     if (
       !dtower1moved &&
       boardpositions[0][1][0] == 0 &&
-      boardpositions[0][2][0] == 0
+      boardpositions[0][2][0] == 0 &&
+      boardpositions[0][1][1] != 2 &&
+      boardpositions[0][2][1] != 2
     ) {
       console.log("castlpossible");
       action2(boardpositions[x][y - 2], boardpositions[x][y]);
@@ -733,7 +781,10 @@ const king = function (x, y, action, action2) {
       !dtower2moved &&
       boardpositions[0][4][0] == 0 &&
       boardpositions[0][5][0] == 0 &&
-      boardpositions[0][6][0] == 0
+      boardpositions[0][6][0] == 0 &&
+      boardpositions[0][4][1] != 2 &&
+      boardpositions[0][5][1] != 2 &&
+      boardpositions[0][6][2] != 2
     ) {
       console.log("castlpossible");
       action2(boardpositions[x][y + 2], boardpositions[x][y]);
@@ -744,9 +795,165 @@ const king = function (x, y, action, action2) {
       if (i != 0 || j != 0) {
         if (x + i <= 7 && x + i >= 0 && y + j <= 7 && y + j >= 0) {
           console.log(x + i, y + j);
+          console.log(boardpositions[x + i][y + j]);
           action(boardpositions[x + i][y + j], boardpositions[x][y]);
         }
       }
     }
   }
 };
+/*const checkAllMoves = function (checkforwhite, pieceOnSquare, x, y) {
+  if (pieceOnSquare != 0) {
+    breakout == false;
+    let pieceOnSquareshort = pieceOnSquare.slice(0, pieceOnSquare - 1);
+    switch (pieceOnSquareshort) {
+      case `${checkforwhite ? "d" : ""}pawn`:
+        pawn(x, y, (newPosArr) => (newPosArr[1] = "2"));
+        break;
+      case `${checkforwhite ? "d" : ""}knight`:
+        knight(x, y, (newPosArr) => (newPosArr[1] = "2"));
+        break;
+      case `${checkforwhite ? "d" : ""}bishop`:
+        bishop(x, y, (newPosArr) => {
+          newPosArr[1] = "2";
+          if (newPosArr[0] != 0) {
+            breakout == true;
+          }
+        });
+        break;
+      case `${checkforwhite ? "d" : ""}tower`:
+        tower(x, y, (newPosArr) => {
+          newPosArr[1] = "2";
+          if (newPosArr[0] != 0) {
+            breakout == true;
+          }
+        });
+        break;
+      case `${checkforwhite ? "d" : ""}Queen`:
+        queen(x, y, (newPosArr) => {
+          newPosArr[1] = "2";
+          if (newPosArr[0] != 0) {
+            breakout == true;
+          }
+        });
+        break;
+      case `${checkforwhite ? "d" : ""}King`:
+        king(x, y, (newPosArr) => (newPosArr[1] = "2"));
+        break;
+    }
+  }
+};
+
+switch (pieceOnSquareshort) {
+          case `${!whitesturn ? "d" : ""}pawn`:
+            pawn(
+              Number(position.charAt(0)),
+              Number(position.charAt(1)),
+
+              (newPosArr, oldPosArr) => {
+                if (
+                  newPosArr[0] == 0 ||
+                  (newPosArr[0].charAt(0) == "d") !=
+                    (oldPosArr[0].charAt(0) == "d")
+                ) {
+                  newPosArr[1] = pieceOnSquare;
+                }
+              },
+              (newPosArr) => (newPosArr[1] = pieceOnSquare),
+              (newPosArr, oldPosArr, enpPosArr) => {
+                newPosArr[1] = pieceOnSquare;
+              }
+            );
+            break;
+          case `${!whitesturn ? "d" : ""}knight`:
+            console.log("it did");
+            knight(
+              Number(position.charAt(0)),
+              Number(position.charAt(1)),
+
+              (newPosArr, oldPosArr) => {
+                if (
+                  newPosArr[0] == 0 ||
+                  (newPosArr[0].charAt(0) == "d") !=
+                    (oldPosArr[0].charAt(0) == "d")
+                ) {
+                  newPosArr[1] = pieceOnSquare;
+                }
+              }
+            );
+            break;
+          case `${!whitesturn ? "d" : ""}bishop`:
+            bishop(
+              Number(position.charAt(0)),
+              Number(position.charAt(1)),
+
+              (newPosArr, oldPosArr, x, y) => {
+                if (
+                  newPosArr[0] == 0 ||
+                  (newPosArr[0].charAt(0) == "d") !=
+                    (oldPosArr[0].charAt(0) == "d")
+                ) {
+                  newPosArr[1] = pieceOnSquare;
+                }
+              }
+            );
+            break;
+          case `${!whitesturn ? "d" : ""}tower`:
+            tower(
+              Number(position.charAt(0)),
+              Number(position.charAt(1)),
+
+              (newPosArr, oldPosArr, x, y) => {
+                if (
+                  newPosArr[0] == 0 ||
+                  (newPosArr[0].charAt(0) == "d") !=
+                    (oldPosArr[0].charAt(0) == "d")
+                ) {
+                  newPosArr[1] = pieceOnSquare;
+                }
+                if (boardpositions[x][y][0] != 0) {
+                  breakout = true;
+                  console.log(breakout);
+                }
+              }
+            );
+            break;
+          case `${!whitesturn ? "d" : ""}Queen`:
+            queen(
+              Number(position.charAt(0)),
+              Number(position.charAt(1)),
+
+              (newPosArr, oldPosArr, x, y) => {
+                if (
+                  newPosArr[0] == 0 ||
+                  (newPosArr[0].charAt(0) == "d") !=
+                    (oldPosArr[0].charAt(0) == "d")
+                ) {
+                  newPosArr[1] = pieceOnSquare;
+                }
+              }
+            );
+            break;
+          case `${!whitesturn ? "d" : ""}King`:
+            king(
+              Number(position.charAt(0)),
+              Number(position.charAt(1)),
+
+              (newPosArr, oldPosArr) => {
+                if (
+                  newPosArr[0] == 0 ||
+                  (newPosArr[0].charAt(0) == "d") !=
+                    (oldPosArr[0].charAt(0) == "d")
+                ) {
+                  newPosArr[1] = pieceOnSquare;
+                }
+              },
+              (newPosArr, oldPosArr) => {
+                console.log("c" + oldPosArr[0]);
+                newPosArr[1] = "c" + oldPosArr[0];
+              }
+            );
+            break;
+        }
+
+*/
