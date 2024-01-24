@@ -694,7 +694,7 @@ const queen = function (x, y, action) {
   bishop(x, y, action);
   tower(x, y, action);
 };
-const king = function (x, y, action, action2) {
+const king = function (xx, yy, action, action2) {
   console.log("king");
   
   // checkAllMoves
