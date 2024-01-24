@@ -6,9 +6,7 @@ button {
   display: inline-block;
   position: relative;
   background-blend-mode: darken;
-  background-size: cover;
-  height: 50px;
-  width: 50px;
+  background-size: cove;
   background-repeat: no-repeat;
 }
 
@@ -16,6 +14,7 @@ button {
     display: grid;
     position: fixed;
     width: 430px;
+  heigth:430px;
     margin-top: 160px;
 }
 div{
