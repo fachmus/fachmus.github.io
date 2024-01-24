@@ -35,7 +35,7 @@ const startingboardpositions = [
     ["dtower2", 0],
   ],
   [
-    ["dpawn1", 0],
+    ["pawn1", 0],
     ["dpawn2", 0],
     ["dpawn3", 0],
     ["dpawn4", 0],
@@ -85,7 +85,7 @@ const startingboardpositions = [
     [0, 0],
   ],
   [
-    ["pawn1", 0],
+    ["dpawn1", 0],
     ["pawn2", 0],
     ["pawn3", 0],
     ["pawn4", 0],
@@ -126,10 +126,7 @@ const getPieceMovement = function (position) {
     let pieceOnSquare =
       boardpositions[position.charAt(0)][position.charAt(1)][0];
     console.log("piecesOnSquare is " + pieceOnSquare);
-    if (
-      boardpositions[position.charAt(0)][position.charAt(1)][1] != 0 &&
-      boardpositions[position.charAt(0)][position.charAt(1)][1] != 2
-    ) {
+    if (boardpositions[position.charAt(0)][position.charAt(1)][1] != 0) {
       console.log(
         boardpositions[position.charAt(0)][position.charAt(1)][1] +
           " could move there"
@@ -160,6 +157,7 @@ const getPieceMovement = function (position) {
         if (boardpositions[x][y][1] != 0 && boardpositions[x][y][1] != 2) {
           boardpositions[x][y][1] = 0;
         }
+        showimages();
       });
       if (pieceOnSquare != 0) {
         console.log(pieceOnSquare + " is standing on that field");
@@ -379,13 +377,50 @@ const movePiece = function (xorigin, yorigin, xdest, ydest) {
     boardpositions[xorigin][yorigin][0].charAt(2) ==
     (boardpositions[xorigin][yorigin][0].charAt(0) == "d" ? "a" : "w")
   ) {
-    if (xdest == boardpositions[xorigin][yorigin][0].charAt(0) == "d" ? 7 : 0) {
-      document.getElementById().classList.remove()
-      // transutation
-    }  
+    console.log(
+      xdest,
+      xdest == (boardpositions[xorigin][yorigin][0].charAt(0) == "d" ? 7 : 0)
+    );
+    if (
+      xdest == (boardpositions[xorigin][yorigin][0].charAt(0) == "d" ? 7 : 0)
+    ) {
+      let transmutationoelements = document.getElementsByClassName("paw");
+      console.log("transmutate");
+      for (let i = 0; i < transmutationoelements.length; i++) {
+        transmutationoelements[i].style.visibility = "visible";
+      }
+      document
+        .getElementById("paw3")
+        .addEventListener("click", continueTransmutation);
+      function continueTransmutation() {
+        console.log("success", xorigin, yorigin);
+        let newPiece = (pieceOnSquare.charAt(0) == "d" ? "d" : "") + String(document.getElementById("paw1").value);
+        console.log(
+          newPiece +
+            (String(pieceOnSquare.charAt(pieceOnSquare.length - 1) + 2) % 10)
+        );
+        pieceOnSquare =
+          newPiece +
+          (String(pieceOnSquare.charAt(pieceOnSquare.length - 1) + 2) % 10);
+        for (let i = 0; i < transmutationoelements.length; i++) {
+          transmutationoelements[i].style.visibility = "hidden";
+        }
+        boardpositions[xdest][ydest][0] = pieceOnSquare;
+        document
+          .getElementById(`${xdest}${ydest}`)
+          .classList.add(pieceOnSquare.substring(0, pieceOnSquare.length - 1));
+        document
+          .getElementById(`${xorigin}${yorigin}`)
+          .classList.remove(
+            (newPiece.charAt(0) == "d" ? "d": "")+"pawn"
+          );
+        boardpositions[xorigin][yorigin][0] = 0;
+        showimages();
+      }
+    }
     if (((xorigin + xdest) / 2) % 1 == 0) {
       let xen = (xorigin + xdest) / 2;
-      console.log(xen);
+      console.log("enpassant" + xen);
       boardpositions[xen][yorigin].push(boardpositions[xorigin][yorigin][0]);
       console.log(boardpositions[xen][yorigin]);
     }
@@ -459,7 +494,7 @@ const movePiece = function (xorigin, yorigin, xdest, ydest) {
       );
   }
   // enpassant in push array
-  boardpositions[xdest][ydest][0] = boardpositions[xorigin][yorigin][0];
+  boardpositions[xdest][ydest][0] = pieceOnSquare;
   document
     .getElementById(`${xdest}${ydest}`)
     .classList.add(
@@ -487,7 +522,6 @@ const linearsearch = function (three_dim_array, action) {
     }
   }
 };
-
 const pawn = function (x, y, action, action2, action3) {
   //enpassant einfügen
   let iswhitemult = boardpositions[x][y][0].charAt(0) != "d" ? -1 : 1;
