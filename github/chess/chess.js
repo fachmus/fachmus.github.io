@@ -23,7 +23,8 @@ let dtower1moved = false;
 let dtower2moved = false;
 let Kingmoved = false;
 let dKingmoved = false;
-
+let inCheck = false;
+let inCheckby;
 const startingboardpositions = [
   [
     ["dtower1", 0],
@@ -339,16 +340,46 @@ const changeturnes = function () {
     //checkAllMoves(whitesturn, pieceOnSquare);
   });
   linearsearch(boardpositions, (x, y) => (boardpositions[x][y][1] = 0));
-  linearsearch(boardpositions, (x, y) => {
-    let pieceOnSquare = boardpositions[x][y][0];
-    //checkAllMoves(!whitesturn, pieceOnSquare);
-  });
+  checkAllMoves(
+    whitesturn,
+    () => {
+      breakout = false;
+    },
+    () => {
+      breakout = true;
+    },
+    false,
+    (actionnewPosArr = (newPosArr, pieceOnSquare) => {
+      if (newPosArr[0] == `${whitesturn ? "" : "d"}King1`) {
+        inCheck = true;
+        inCheckby.push(pieceOnSquare);
+      }
+    })
+  );
+  linearsearch(boardpositions, (x, y) => (boardpositions[x][y][1] = 0));
   let surroundingspan = document.getElementById("surrounding");
+  if (!whitesturn) {
+    surroundingspan.setAttribute("style", "transform:rotate(180deg);");
+    linearsearch(boardpositions, (x, y) => {
+      document
+        .getElementById(String(x) + String(y))
+        .setAttribute("style", "transform:rotate(180deg);");
+    });
+  } else {
+    surroundingspan.setAttribute("style", "transform:rotate(0deg);");
+    linearsearch(boardpositions, (x, y) => {
+      document
+        .getElementById(String(x) + String(y))
+        .setAttribute("style", "transform:rotate(0deg);");
+    });
+  }
 
+  console.log(inCheck ? "check" : "");
 };
 //
 
 const movePiece = function (xorigin, yorigin, xdest, ydest) {
+  console.log(xorigin,xdest);
   let pieceOnSquare = boardpositions[xorigin][yorigin][0];
   if (!dKingmoved && pieceOnSquare == "dKing1") {
     dKingmoved != dKingmoved;
@@ -368,14 +399,17 @@ const movePiece = function (xorigin, yorigin, xdest, ydest) {
   if (!tower2moved && pieceOnSquare == "tower2") {
     tower2moved != tower2moved;
   }
+  console.log(boardpositions[xorigin][yorigin][0].charAt(1));
+  console.log((boardpositions[xorigin][yorigin][0].charAt(0) == "d") ? "p" : "a");
+  
   console.log(
-    boardpositions[xorigin][yorigin][0].charAt(1) ==
-      (boardpositions[xorigin][yorigin][0].charAt(0) == "d" ? "P" : "a")
+    (boardpositions[xorigin][yorigin][0].charAt(1) ==
+      ((boardpositions[xorigin][yorigin][0].charAt(0) == "d") ? "p" : "a"))
   );
 
   if (
     boardpositions[xorigin][yorigin][0].charAt(1) ==
-    (boardpositions[xorigin][yorigin][0].charAt(0) == "d" ? "P" : "a")
+    (boardpositions[xorigin][yorigin][0].charAt(0) == "d" ? "p" : "a")
   ) {
     console.log(
       xdest,
@@ -420,7 +454,7 @@ const movePiece = function (xorigin, yorigin, xdest, ydest) {
     }
     if (((xorigin + xdest) / 2) % 1 == 0) {
       let xen = (xorigin + xdest) / 2;
-      console.log("enpassant" + xen);
+      console.log("enpassant auf " + xen);
       boardpositions[xen][yorigin].push(boardpositions[xorigin][yorigin][0]);
       console.log(boardpositions[xen][yorigin]);
     }
@@ -428,7 +462,7 @@ const movePiece = function (xorigin, yorigin, xdest, ydest) {
       console.log("enpassant");
       linearsearch(boardpositions, (x, y) => {
         if (boardpositions[x][y][0] == boardpositions[xdest][ydest][2]) {
-          console.log(x, y);
+          console.log(x, y, "enpassant passiert");
           document
             .getElementById(`${x}${y}`)
             .classList.remove(
@@ -567,7 +601,7 @@ const knight = function (x, y, action) {
   for (let index = 0; index < 4; index++) {
     for (let jindex = -1; jindex < 2; jindex += 2) {
       let isxcoor = index % 2 == 0;
-      console.log(isxcoor);
+      //console.log(isxcoor);
       let is_upleft = index < 2 ? -1 : 1;
       if (
         isxcoor &&
@@ -576,7 +610,7 @@ const knight = function (x, y, action) {
         y + jindex >= 0 &&
         y + jindex <= 7
       ) {
-        console.log(x + 2 * is_upleft, y + jindex);
+        //console.log(x + 2 * is_upleft, y + jindex);
         action(
           boardpositions[x + 2 * is_upleft][y + jindex],
           boardpositions[x][y]
@@ -588,7 +622,7 @@ const knight = function (x, y, action) {
         x + jindex >= 0 &&
         x + jindex <= 7
       ) {
-        console.log(x + jindex, y + 2 * is_upleft);
+        //console.log(x + jindex, y + 2 * is_upleft);
         action(
           boardpositions[x + jindex][y + 2 * is_upleft],
           boardpositions[x][y]
@@ -610,7 +644,7 @@ const knight = function (x, y, action) {
 */
 const bishop = function (x, y, action) {
   //works except enpassant
-  console.log("bishop");
+  //console.log("bishop");
   for (let index = 1; index <= 4; index++) {
     for (let jindex = 1; true; jindex++) {
       if (
@@ -621,7 +655,6 @@ const bishop = function (x, y, action) {
       ) {
         break;
       }
-      console;
       if (
         boardpositions[x + (index < 3 ? -1 : 1) * jindex][
           y + (index % 2 == 0 ? -1 : 1) * jindex
@@ -630,10 +663,7 @@ const bishop = function (x, y, action) {
         [y + (index % 2) == 0 ? -1 : 1]
         [0] == ????enpassant*/
       ) {
-        console.log(
-          x + (index < 3 ? -1 : 1) * jindex,
-          y + (index % 2 == 0 ? -1 : 1) * jindex
-        );
+        //console.log(x + (index < 3 ? -1 : 1) * jindex,y + (index % 2 == 0 ? -1 : 1) * jindex);
         action(
           boardpositions[x + (index < 3 ? -1 : 1) * jindex][
             y + (index % 2 == 0 ? -1 : 1) * jindex
@@ -641,10 +671,7 @@ const bishop = function (x, y, action) {
           boardpositions[x][y]
         );
       } else {
-        console.log(
-          x + (index < 3 ? -1 : 1) * jindex,
-          y + (index % 2 == 0 ? -1 : 1) * jindex
-        );
+        //console.log(x + (index < 3 ? -1 : 1) * jindex,y + (index % 2 == 0 ? -1 : 1) * jindex);
         action(
           boardpositions[x + (index < 3 ? -1 : 1) * jindex][
             y + (index % 2 == 0 ? -1 : 1) * jindex
@@ -661,31 +688,31 @@ const bishop = function (x, y, action) {
   }
 };
 const tower = function (x, y, action) {
-  console.log("tower");
+  //console.log("tower");
   for (let index = 0; index < 4; index++) {
     for (let jindex = 1; true; jindex++) {
       let isxcoor = index % 2 == 0 ? true : false;
       let is_upleft = index < 2 ? -1 : 1;
-      console.log(isxcoor + "\n" + is_upleft);
+      //console.log(isxcoor + "\n" + is_upleft);
       if (
         isxcoor &&
         x + jindex * is_upleft <= 7 &&
         x + jindex * is_upleft >= 0
       ) {
-        console.log(x + jindex * is_upleft, y);
+        //console.log(x + jindex * is_upleft, y);
         breakout = false;
         action(boardpositions[x + jindex * is_upleft][y], boardpositions[x][y]);
-        console.log(breakout);
+        //console.log(breakout);
         if (breakout) break;
       } else if (
         !isxcoor &&
         y + jindex * is_upleft <= 7 &&
         y + jindex * is_upleft >= 0
       ) {
-        console.log(x, y + jindex * is_upleft);
+        //console.log(x, y + jindex * is_upleft);
         breakout = false;
         action(boardpositions[x][y + jindex * is_upleft], boardpositions[x][y]);
-        console.log(breakout);
+        //console.log(breakout);
         if (breakout) break;
       } else {
         break;
@@ -694,14 +721,14 @@ const tower = function (x, y, action) {
   }
 };
 const queen = function (x, y, action) {
-  console.log("queen");
+  //console.log("queen");
   bishop(x, y, action);
   tower(x, y, action);
 };
 const king = function (x, y, action, action2, boolnotgetchecked) {
   console.log("king");
   let checkforwhite = boardpositions[x][y][0].charAt(0) != "d";
-  console.log(checkforwhite);
+  //console.log(checkforwhite);
   // checkAllMoves
   if (!boolnotgetchecked) {
     checkAllMoves(
@@ -722,7 +749,7 @@ const king = function (x, y, action, action2, boolnotgetchecked) {
         boardpositions[7][1][1] != 2 &&
         boardpositions[7][2][1] != 2
       ) {
-        console.log("castlpossible");
+        //console.log("castlpossible");
         action2(boardpositions[x][y - 2], boardpositions[x][y]);
       }
 
@@ -735,7 +762,7 @@ const king = function (x, y, action, action2, boolnotgetchecked) {
         boardpositions[7][5][1] != 2 &&
         boardpositions[7][6][1] != 2
       ) {
-        console.log("castlpossible");
+        //console.log("castlpossible");
         action2(boardpositions[x][y + 2], boardpositions[x][y]);
       }
     } else if (!whitesturn && !dKingmoved) {
@@ -746,7 +773,7 @@ const king = function (x, y, action, action2, boolnotgetchecked) {
         boardpositions[0][1][1] != 2 &&
         boardpositions[0][2][1] != 2
       ) {
-        console.log("castlpossible");
+        //console.log("castlpossible");
         action2(boardpositions[x][y - 2], boardpositions[x][y]);
       }
       if (
@@ -758,7 +785,7 @@ const king = function (x, y, action, action2, boolnotgetchecked) {
         boardpositions[0][5][1] != 2 &&
         boardpositions[0][6][2] != 2
       ) {
-        console.log("castlpossible");
+        //console.log("castlpossible");
         action2(boardpositions[x][y + 2], boardpositions[x][y]);
       }
     }
@@ -767,19 +794,21 @@ const king = function (x, y, action, action2, boolnotgetchecked) {
     for (j = -1; j <= 1; j++) {
       if (i != 0 || j != 0) {
         if (x + i <= 7 && x + i >= 0 && y + j <= 7 && y + j >= 0) {
-          console.log(x + i, y + j);
-          console.log(boardpositions[x + i][y + j]);
+          //console.log(x + i, y + j);
+          //console.log(boardpositions[x + i][y + j]);
           action(boardpositions[x + i][y + j], boardpositions[x][y]);
         }
       }
     }
   }
 };
+
 const checkAllMoves = function (
   checkforwhite,
   startingaction,
   actionpassthrough,
-  boolnotgetchecked = false
+  boolnotgetchecked = false,
+  actionnewPosArr = (newPosArr) => (newPosArr[1] = 2)
 ) {
   linearsearch(boardpositions, (xx, yy) => {
     let pieceOnSquare = boardpositions[xx][yy][0];
@@ -787,40 +816,40 @@ const checkAllMoves = function (
     if (pieceOnSquare != 0) {
       startingaction;
       let pieceOnSquareshort = pieceOnSquare.slice(0, pieceOnSquare.length - 1);
-      console.log(pieceOnSquareshort);
+      //console.log(pieceOnSquareshort);
 
       switch (pieceOnSquareshort) {
         case `${checkforwhite ? "d" : ""}pawn`:
-          console.log("checked for " + pieceOnSquare);
+          //console.log("checked for " + pieceOnSquare);
           pawn(xx, yy, (newPosArr) => (newPosArr[1] = "2"));
           break;
         case `${checkforwhite ? "d" : ""}knight`:
-          console.log("checked for " + pieceOnSquare);
+          //console.log("checked for " + pieceOnSquare);
           knight(xx, yy, (newPosArr) => (newPosArr[1] = "2"));
           break;
         case `${checkforwhite ? "d" : ""}bishop`:
-          console.log("checked for " + pieceOnSquare);
+          //console.log("checked for " + pieceOnSquare);
           bishop(xx, yy, (newPosArr) => {
-            newPosArr[1] = "2";
+            actionnewPosArr(newPosArr);
             if (newPosArr[0] != 0) {
               actionpassthrough;
             }
           });
           break;
         case `${checkforwhite ? "d" : ""}tower`:
-          console.log("checked for " + pieceOnSquare);
+          //console.log("checked for " + pieceOnSquare);
           tower(xx, yy, (newPosArr) => {
-            newPosArr[1] = "2";
+            actionnewPosArr(newPosArr);
             if (newPosArr[0] != 0) {
               actionpassthrough;
             }
           });
           break;
         case `${checkforwhite ? "d" : ""}Queen`:
-          console.log("checked for " + pieceOnSquare);
+          //console.log("checked for " + pieceOnSquare);
           queen(xx, yy, (newPosArr) => {
-            newPosArr[1] = "2";
-            console.log(newPosArr);
+            actionnewPosArr(newPosArr);
+            //console.log(newPosArr);
             if (newPosArr[0] != 0) {
               actionpassthrough;
             }
@@ -839,158 +868,3 @@ const checkAllMoves = function (
     }
   });
 };
-/*const checkAllMoves = function (checkforwhite, pieceOnSquare, x, y) {
-  if (pieceOnSquare != 0) {
-    breakout == false;
-    let pieceOnSquareshort = pieceOnSquare.slice(0, pieceOnSquare - 1);
-    switch (pieceOnSquareshort) {
-      case `${checkforwhite ? "d" : ""}pawn`:
-        pawn(x, y, (newPosArr) => (newPosArr[1] = "2"));
-        break;
-      case `${checkforwhite ? "d" : ""}knight`:
-        knight(x, y, (newPosArr) => (newPosArr[1] = "2"));
-        break;
-      case `${checkforwhite ? "d" : ""}bishop`:
-        bishop(x, y, (newPosArr) => {
-          newPosArr[1] = "2";
-          if (newPosArr[0] != 0) {
-            breakout == true;
-          }
-        });
-        break;
-      case `${checkforwhite ? "d" : ""}tower`:
-        tower(x, y, (newPosArr) => {
-          newPosArr[1] = "2";
-          if (newPosArr[0] != 0) {
-            breakout == true;
-          }
-        });
-        break;
-      case `${checkforwhite ? "d" : ""}Queen`:
-        queen(x, y, (newPosArr) => {
-          newPosArr[1] = "2";
-          if (newPosArr[0] != 0) {
-            breakout == true;
-          }
-        });
-        break;
-      case `${checkforwhite ? "d" : ""}King`:
-        king(x, y, (newPosArr) => (newPosArr[1] = "2"));
-        break;
-    }
-  }
-};
-
-switch (pieceOnSquareshort) {
-          case `${!whitesturn ? "d" : ""}pawn`:
-            pawn(
-              Number(position.charAt(0)),
-              Number(position.charAt(1)),
-
-              (newPosArr, oldPosArr) => {
-                if (
-                  newPosArr[0] == 0 ||
-                  (newPosArr[0].charAt(0) == "d") !=
-                    (oldPosArr[0].charAt(0) == "d")
-                ) {
-                  newPosArr[1] = pieceOnSquare;
-                }
-              },
-              (newPosArr) => (newPosArr[1] = pieceOnSquare),
-              (newPosArr, oldPosArr, enpPosArr) => {
-                newPosArr[1] = pieceOnSquare;
-              }
-            );
-            break;
-          case `${!whitesturn ? "d" : ""}knight`:
-            console.log("it did");
-            knight(
-              Number(position.charAt(0)),
-              Number(position.charAt(1)),
-
-              (newPosArr, oldPosArr) => {
-                if (
-                  newPosArr[0] == 0 ||
-                  (newPosArr[0].charAt(0) == "d") !=
-                    (oldPosArr[0].charAt(0) == "d")
-                ) {
-                  newPosArr[1] = pieceOnSquare;
-                }
-              }
-            );
-            break;
-          case `${!whitesturn ? "d" : ""}bishop`:
-            bishop(
-              Number(position.charAt(0)),
-              Number(position.charAt(1)),
-
-              (newPosArr, oldPosArr, x, y) => {
-                if (
-                  newPosArr[0] == 0 ||
-                  (newPosArr[0].charAt(0) == "d") !=
-                    (oldPosArr[0].charAt(0) == "d")
-                ) {
-                  newPosArr[1] = pieceOnSquare;
-                }
-              }
-            );
-            break;
-          case `${!whitesturn ? "d" : ""}tower`:
-            tower(
-              Number(position.charAt(0)),
-              Number(position.charAt(1)),
-
-              (newPosArr, oldPosArr, x, y) => {
-                if (
-                  newPosArr[0] == 0 ||
-                  (newPosArr[0].charAt(0) == "d") !=
-                    (oldPosArr[0].charAt(0) == "d")
-                ) {
-                  newPosArr[1] = pieceOnSquare;
-                }
-                if (boardpositions[x][y][0] != 0) {
-                  breakout = true;
-                  console.log(breakout);
-                }
-              }
-            );
-            break;
-          case `${!whitesturn ? "d" : ""}Queen`:
-            queen(
-              Number(position.charAt(0)),
-              Number(position.charAt(1)),
-
-              (newPosArr, oldPosArr, x, y) => {
-                if (
-                  newPosArr[0] == 0 ||
-                  (newPosArr[0].charAt(0) == "d") !=
-                    (oldPosArr[0].charAt(0) == "d")
-                ) {
-                  newPosArr[1] = pieceOnSquare;
-                }
-              }
-            );
-            break;
-          case `${!whitesturn ? "d" : ""}King`:
-            king(
-              Number(position.charAt(0)),
-              Number(position.charAt(1)),
-
-              (newPosArr, oldPosArr) => {
-                if (
-                  newPosArr[0] == 0 ||
-                  (newPosArr[0].charAt(0) == "d") !=
-                    (oldPosArr[0].charAt(0) == "d")
-                ) {
-                  newPosArr[1] = pieceOnSquare;
-                }
-              },
-              (newPosArr, oldPosArr) => {
-                console.log("c" + oldPosArr[0]);
-                newPosArr[1] = "c" + oldPosArr[0];
-              }
-            );
-            break;
-        }
-
-*/
