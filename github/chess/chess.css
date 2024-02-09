@@ -28,7 +28,7 @@ button {
   width: 430px;
   height: 432px;
   margin-top: 160px;
-  transform: ScaleY(-100%);
+  transform: ScaleX(-100%);
 }
 div {
   position: relative;
