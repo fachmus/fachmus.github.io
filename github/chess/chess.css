@@ -1,4 +1,10 @@
 button {
+  border-style:solid;
+  border-width:4px;
+  border-top-color:grey;
+  border-right-color:grey;
+  border-bottom-color:lightgrey;
+  border-left-color:lightgrey;
   width: 50px;
   font-size: 50px;
   height: 50px;
