@@ -22,13 +22,14 @@ button {
   width: 430px;
   height: 432px;
   margin-top: 160px;
+  /*transform:Scale;*/
 }
 div {
   position: relative;
   margin-top: 1px;
 }
 .dark {
-  background-color: navy;
+  background-color: blue;
 }
 .light {
   background-color: azure;
