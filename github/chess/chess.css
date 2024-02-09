@@ -22,7 +22,7 @@ button {
   width: 430px;
   height: 432px;
   margin-top: 160px;
-  /*transform:Scale;*/
+  transform: ScaleY(-100%);
 }
 div {
   position: relative;
