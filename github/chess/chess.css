@@ -1,6 +1,6 @@
 button {
   border-style:solid;
-  border-width:4px;
+  border-width:2px;
   border-top-color:grey;
   border-right-color:grey;
   border-bottom-color:lightgrey;
@@ -28,7 +28,6 @@ button {
   width: 430px;
   height: 432px;
   margin-top: 160px;
-  transform: ScaleX(-100%);
 }
 div {
   position: relative;
